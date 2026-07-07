@@ -26,28 +26,55 @@ public class JwtFilter extends OncePerRequestFilter {
     private final UtilisateurRepository utilisateurRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
 
         final String authHeader = request.getHeader("Authorization");
+
+        // ✅ pas de token → on laisse passer
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        final String token = authHeader.substring(7);
-        final String identifiant = jwtService.extractUsername(token);
+        try {
+            final String token = authHeader.substring(7);
 
-        if (identifiant != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            Optional<Utilisateur> userOpt = utilisateurRepository.findByIdentifiant(identifiant);
-            if (userOpt.isPresent() && jwtService.validateToken(token, identifiant)) {
-                String role = jwtService.extractRole(token);
-                var authToken = new UsernamePasswordAuthenticationToken(
-                        identifiant, null, List.of(new SimpleGrantedAuthority("ROLE_" + role)));
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+            final String identifiant = jwtService.extractUsername(token);
+
+            if (identifiant != null &&
+                    SecurityContextHolder.getContext().getAuthentication() == null) {
+
+                Optional<Utilisateur> userOpt =
+                        utilisateurRepository.findByIdentifiant(identifiant);
+
+                if (userOpt.isPresent()
+                        && jwtService.validateToken(token, identifiant)) {
+
+                    String role = jwtService.extractRole(token);
+
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(
+                                    identifiant,
+                                    null,
+                                    List.of(new SimpleGrantedAuthority("ROLE_" + role))
+                            );
+
+                    authToken.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request)
+                    );
+
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
+
+        } catch (Exception e) {
+            // 🔥 IMPORTANT : token invalide → on ignore COMPLETEMENT
+            SecurityContextHolder.clearContext();
         }
+
         filterChain.doFilter(request, response);
     }
 }

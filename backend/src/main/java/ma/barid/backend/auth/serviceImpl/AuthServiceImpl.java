@@ -64,4 +64,18 @@ public class AuthServiceImpl implements AuthService {
 
         utilisateurRepository.save(utilisateur);
     }
+    @Override
+    public String genererIdentifiantEtMotDePasse(Utilisateur utilisateur, String raisonSociale) {
+        String base = raisonSociale.toLowerCase().replaceAll("[^a-z0-9]", "");
+        String identifiant = base.substring(0, Math.min(8, base.length())) + utilisateur.getIdUtilisateur();
+
+        String motDePasseClair = java.util.UUID.randomUUID().toString().substring(0, 8);
+
+        utilisateur.setIdentifiant(identifiant);
+        utilisateur.setMotDePasse(passwordEncoder.encode(motDePasseClair));
+        utilisateur.setActif(true);
+        utilisateurRepository.save(utilisateur);
+
+        return motDePasseClair;
+    }
 }

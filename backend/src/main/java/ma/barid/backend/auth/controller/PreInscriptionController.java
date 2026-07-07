@@ -17,7 +17,12 @@ public class PreInscriptionController {
 
     @PostMapping("/pre-inscription")
     public ResponseEntity<String> preInscription(@Valid @RequestBody PreInscriptionRequest request) {
+
+        System.out.println("===> PRE INSCRIPTION");
+
         preInscriptionService.creerDemande(request);
-        return ResponseEntity.ok("Demande de pre-inscription enregistree, en attente de validation");
+
+        return ResponseEntity.ok(
+                "Demande de pre-inscription enregistree, en attente de validation");
     }
 }

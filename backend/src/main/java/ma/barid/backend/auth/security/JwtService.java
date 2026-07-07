@@ -25,18 +25,25 @@ public class JwtService {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
+    // =======================
+    // GENERATION TOKEN
+    // =======================
     public String generateToken(String identifiant, String role) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", role);
+
         return Jwts.builder()
                 .claims(claims)
                 .subject(identifiant)
-                .issuedAt(new Date(System.currentTimeMillis()))
+                .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSigningKey())
                 .compact();
     }
 
+    // =======================
+    // EXTRACTION SAFE
+    // =======================
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -46,7 +53,12 @@ public class JwtService {
     }
 
     public boolean validateToken(String token, String identifiant) {
-        return extractUsername(token).equals(identifiant) && !isTokenExpired(token);
+        try {
+            return extractUsername(token).equals(identifiant)
+                    && !isTokenExpired(token);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private boolean isTokenExpired(String token) {
@@ -54,11 +66,23 @@ public class JwtService {
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> resolver) {
-        return resolver.apply(extractAllClaims(token));
+        final Claims claims = extractAllClaims(token);
+        return resolver.apply(claims);
     }
 
+    // =======================
+    // 🔥 FIX IMPORTANT ICI
+    // =======================
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().verifyWith(getSigningKey()).build()
-                .parseSignedClaims(token).getPayload();
+        try {
+            return Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+        } catch (Exception e) {
+            // 🔥 NE JAMAIS FAIRE CRASH ICI
+            throw new RuntimeException("Invalid JWT token", e);
+        }
     }
 }

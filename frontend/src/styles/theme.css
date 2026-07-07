@@ -1,0 +1,66 @@
+:root {
+    /* --- Echelle Bleu --- */
+    --blue-50:  #EAF1F8;
+    --blue-100: #D2E1F0;
+    --blue-200: #A8C7E3;
+    --blue-300: #7EA9D3;
+    --blue-400: #4C86BD;
+    --blue-500: #0B3D6B; /* bleu institutionnel principal */
+    --blue-600: #092F54;
+    --blue-700: #07253F;
+
+    /* --- Echelle Jaune / Or postal --- */
+    --yellow-50:  #FDF6E9;
+    --yellow-100: #FBEAC7;
+    --yellow-200: #F6D48A;
+    --yellow-300: #EFBE5C;
+    --yellow-400: #E0A63A; /* accent principal */
+    --yellow-500: #C48A24;
+    --yellow-600: #9C6C19;
+
+    /* --- Echelle Gris --- */
+    --gray-50:  #F7F8FA;
+    --gray-100: #EEF1F4;
+    --gray-200: #DDE2E8;
+    --gray-300: #C3CBD3;
+    --gray-400: #9AA5B1;
+    --gray-500: #5C6773;
+    --gray-700: #374151;
+    --gray-900: #1B2430;
+
+    /* --- Alias semantiques (utilises partout dans le code) --- */
+    --color-primary: var(--blue-500);
+    --color-primary-hover: var(--blue-600);
+    --color-primary-light: var(--blue-300);
+
+    --color-accent: var(--yellow-400);
+    --color-accent-hover: var(--yellow-500);
+
+    --color-bg: var(--gray-50);
+    --color-surface: #FFFFFF;
+    --color-border: var(--gray-200);
+
+    --color-text: var(--gray-900);
+    --color-text-muted: var(--gray-500);
+
+    --color-status-pending: var(--yellow-400);
+    --color-status-success: #2F9E63;
+    --color-status-danger: #D9534F;
+    --color-status-info: var(--blue-400);
+
+    --font-display: "Poppins", sans-serif;
+    --font-body: "Inter", sans-serif;
+
+    --space-xs: 4px; --space-sm: 8px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px;
+    --radius-sm: 6px; --radius-md: 10px;
+    --shadow-card: 0 2px 8px rgba(11, 61, 107, 0.10);
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(180deg, var(--blue-50) 0%, var(--gray-50) 260px);
+    color: var(--color-text);
+    font-family: var(--font-body);
+}
+
+h1, h2, h3 { font-family: var(--font-display); color: var(--color-primary); }
