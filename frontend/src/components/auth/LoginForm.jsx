@@ -12,11 +12,8 @@ export default function LoginForm({ onSubmit, loading, error }) {
     };
 
     return (
-        <form
-            onSubmit={handleSubmit}
-            className="card-surface login-form"
-        >
-            <h2 className="login-title">Connexion</h2>
+        <form onSubmit={handleSubmit} style={{ width: "100%", maxWidth: 360 }}>
+            <h2 style={{ marginBottom: 24 }}>Connexion</h2>
 
             <Input
                 label="Identifiant"
@@ -35,7 +32,7 @@ export default function LoginForm({ onSubmit, loading, error }) {
             />
 
             {error && (
-                <p className="error-text">
+                <p style={{ color: "var(--color-status-danger)", fontSize: 13, marginBottom: 12 }}>
                     {error}
                 </p>
             )}

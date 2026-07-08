@@ -1,40 +1,34 @@
 :root {
-    /* --- Echelle Bleu --- */
+    /* Bleu */
     --blue-50:  #EAF1F8;
     --blue-100: #D2E1F0;
-    --blue-200: #A8C7E3;
     --blue-300: #7EA9D3;
-    --blue-400: #4C86BD;
-    --blue-500: #0B3D6B; /* bleu institutionnel principal */
+    --blue-400: #3D6EA5;
+    --blue-500: #0B3D6B;
     --blue-600: #092F54;
-    --blue-700: #07253F;
 
-    /* --- Echelle Jaune / Or postal --- */
-    --yellow-50:  #FDF6E9;
-    --yellow-100: #FBEAC7;
-    --yellow-200: #F6D48A;
-    --yellow-300: #EFBE5C;
-    --yellow-400: #E0A63A; /* accent principal */
-    --yellow-500: #C48A24;
-    --yellow-600: #9C6C19;
+    /* Jaune (marque) */
+    --yellow-50:  #FFF8E6;
+    --yellow-200: #FFE49A;
+    --yellow-400: #FFC72C;
+    --yellow-500: #E0A800;
+    --yellow-600: #B98600;
 
-    /* --- Echelle Gris --- */
-    --gray-50:  #F7F8FA;
-    --gray-100: #EEF1F4;
+    /* Gris */
+    --gray-50:  #F4F5F7;
+    --gray-100: #EAEDF1;
     --gray-200: #DDE2E8;
     --gray-300: #C3CBD3;
-    --gray-400: #9AA5B1;
     --gray-500: #5C6773;
-    --gray-700: #374151;
     --gray-900: #1B2430;
 
-    /* --- Alias semantiques (utilises partout dans le code) --- */
+    /* Alias semantiques */
     --color-primary: var(--blue-500);
     --color-primary-hover: var(--blue-600);
-    --color-primary-light: var(--blue-300);
+    --color-primary-light: var(--blue-400);
 
-    --color-accent: var(--yellow-400);
-    --color-accent-hover: var(--yellow-500);
+    --color-brand: var(--yellow-400);
+    --color-brand-hover: var(--yellow-500);
 
     --color-bg: var(--gray-50);
     --color-surface: #FFFFFF;
@@ -52,15 +46,17 @@
     --font-body: "Inter", sans-serif;
 
     --space-xs: 4px; --space-sm: 8px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px;
-    --radius-sm: 6px; --radius-md: 10px;
-    --shadow-card: 0 2px 8px rgba(11, 61, 107, 0.10);
+    --radius-sm: 8px; --radius-md: 14px;
+
+    --shadow-card: 0 4px 16px rgba(11, 61, 107, 0.08);
+    --shadow-nav: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 body {
     margin: 0;
-    background: linear-gradient(180deg, var(--blue-50) 0%, var(--gray-50) 260px);
+    background: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-body);
 }
 
-h1, h2, h3 { font-family: var(--font-display); color: var(--color-primary); }
+h1, h2, h3 { font-family: var(--font-display); color: var(--color-primary); margin: 0; }
