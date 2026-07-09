@@ -2,6 +2,7 @@ package ma.barid.backend.zaineb.serviceimpl;
 
 
 import lombok.RequiredArgsConstructor;
+import ma.barid.backend.zaineb.mapper.ContratClientMapper;
 
 import ma.barid.backend.zaineb.dto.ContratClientDTO;
 import ma.barid.backend.zaineb.entity.ContratClient;

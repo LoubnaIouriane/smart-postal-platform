@@ -23,12 +23,15 @@ public class ContratClientController {
 
     @GetMapping
     public List<ContratClient> getAllContrats() {
+
         return contratRepository.findAll();
     }
 
 
     @GetMapping("/{id}")
-    public ContratClient getContratById(@PathVariable Long id) {
+    public ContratClient getContratById(
+            @PathVariable Long id) {
+
         return contratRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Contrat introuvable"));
     }
@@ -47,22 +50,32 @@ public class ContratClientController {
             @PathVariable Long id,
             @RequestBody ContratClient contrat) {
 
+
         ContratClient existing = contratRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Contrat introuvable"));
 
+
         existing.setNumeroContrat(contrat.getNumeroContrat());
+
         existing.setDateDebut(contrat.getDateDebut());
+
         existing.setDateFin(contrat.getDateFin());
+
         existing.setStatut(contrat.getStatut());
+
         existing.setClient(contrat.getClient());
+
         existing.setGrilleRemise(contrat.getGrilleRemise());
+
 
         return contratRepository.save(existing);
     }
 
 
     @DeleteMapping("/{id}")
-    public void deleteContrat(@PathVariable Long id) {
+    public void deleteContrat(
+            @PathVariable Long id) {
+
         contratRepository.deleteById(id);
     }
 }

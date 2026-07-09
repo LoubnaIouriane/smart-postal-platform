@@ -1,17 +1,19 @@
 package ma.barid.backend.zaineb.mapper;
 
-
 import ma.barid.backend.zaineb.dto.CommercialDTO;
 import ma.barid.backend.zaineb.entity.Commercial;
 import org.springframework.stereotype.Component;
-
 
 @Component
 public class CommercialMapper {
 
 
+    public CommercialDTO toDTO(Commercial commercial) {
 
-    public CommercialDTO toDTO(Commercial commercial){
+        if (commercial == null) {
+            return null;
+        }
+
 
         return CommercialDTO.builder()
 
@@ -25,22 +27,23 @@ public class CommercialMapper {
 
                 .telephone(commercial.getTelephone())
 
-
                 .agenceId(
-                        commercial.getAgence() != null ?
-                                commercial.getAgence().getIdAgence()
+                        commercial.getAgence() != null
+                                ? commercial.getAgence().getIdAgence()
                                 : null
                 )
 
                 .build();
-
     }
 
 
 
+    public Commercial toEntity(CommercialDTO dto) {
 
+        if (dto == null) {
+            return null;
+        }
 
-    public Commercial toEntity(CommercialDTO dto){
 
         Commercial commercial = new Commercial();
 
@@ -57,7 +60,5 @@ public class CommercialMapper {
 
 
         return commercial;
-
     }
-
 }

@@ -1,18 +1,18 @@
 package ma.barid.backend.zaineb.mapper;
 
-
 import ma.barid.backend.zaineb.dto.ContratClientDTO;
 import ma.barid.backend.zaineb.entity.ContratClient;
 import org.springframework.stereotype.Component;
-
 
 @Component
 public class ContratClientMapper {
 
 
+    public ContratClientDTO toDTO(ContratClient contrat) {
 
-    public ContratClientDTO toDTO(ContratClient contrat){
-
+        if (contrat == null) {
+            return null;
+        }
 
         return ContratClientDTO.builder()
 
@@ -29,7 +29,7 @@ public class ContratClientMapper {
 
                 .clientId(
                         contrat.getClient() != null ?
-                                contrat.getClient().getIdClient()
+                                contrat.getClient().getIdUtilisateur()
                                 : null
                 )
 
@@ -41,18 +41,16 @@ public class ContratClientMapper {
                 )
 
                 .build();
-
     }
 
 
+    public ContratClient toEntity(ContratClientDTO dto) {
 
-
-
-    public ContratClient toEntity(ContratClientDTO dto){
-
+        if (dto == null) {
+            return null;
+        }
 
         ContratClient contrat = new ContratClient();
-
 
         contrat.setIdContrat(dto.getIdContrat());
 
@@ -66,7 +64,5 @@ public class ContratClientMapper {
 
 
         return contrat;
-
     }
-
 }

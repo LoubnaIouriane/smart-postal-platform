@@ -12,7 +12,6 @@ import java.util.List;
 @CrossOrigin("*")
 public class GrilleRemiseController {
 
-
     private final GrilleRemiseRepository grilleRepository;
 
 
@@ -29,6 +28,7 @@ public class GrilleRemiseController {
 
     @GetMapping("/{id}")
     public GrilleRemise getGrilleById(@PathVariable Long id) {
+
         return grilleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Grille remise introuvable"));
     }
@@ -50,7 +50,7 @@ public class GrilleRemiseController {
         GrilleRemise existing = grilleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Grille remise introuvable"));
 
-        existing.setNom(grille.getNom());
+        existing.setNomGrille(grille.getNomGrille());
         existing.setTauxRemise(grille.getTauxRemise());
 
         return grilleRepository.save(existing);
@@ -59,6 +59,7 @@ public class GrilleRemiseController {
 
     @DeleteMapping("/{id}")
     public void deleteGrille(@PathVariable Long id) {
+
         grilleRepository.deleteById(id);
     }
 }
