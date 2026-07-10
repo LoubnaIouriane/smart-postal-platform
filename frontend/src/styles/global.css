@@ -1,0 +1,92 @@
+* { box-sizing: border-box; }
+
+/* ---------- Boutons ---------- */
+.btn {
+    border-radius: var(--radius-sm);
+    padding: 11px 20px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    transition: background 0.15s ease, transform 0.05s ease, box-shadow 0.15s ease;
+}
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-primary { background: var(--color-primary); color: #fff; }
+.btn-primary:hover:not(:disabled) { background: var(--color-primary-hover); }
+
+.btn-brand { background: var(--color-brand); color: var(--gray-900); }
+.btn-brand:hover:not(:disabled) { background: var(--color-brand-hover); }
+
+.btn-outline {
+    background: transparent; color: var(--color-primary);
+    border: 1.5px solid var(--color-primary);
+}
+.btn-outline:hover:not(:disabled) { background: var(--blue-50); }
+
+.btn-block { width: 100%; }
+
+/* ---------- Champs ---------- */
+.field-label {
+    display: block; margin-bottom: var(--space-xs);
+    font-size: 13px; color: var(--color-text-muted); font-weight: 600;
+}
+.field-input, .field-select {
+    width: 100%; padding: 11px 13px;
+    border: 1.5px solid var(--color-border); border-radius: var(--radius-sm);
+    font-family: var(--font-body); font-size: 14px; background: #fff;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.field-input:focus, .field-select:focus {
+    outline: none; border-color: var(--color-primary-light);
+    box-shadow: 0 0 0 3px var(--blue-100);
+}
+
+/* ---------- Cartes ---------- */
+.card-surface {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+}
+
+/* ---------- Badges de statut ---------- */
+.badge {
+    display: inline-block; padding: 4px 12px; border-radius: 999px;
+    font-size: 12.5px; font-weight: 700; color: #fff;
+}
+.badge-pending { background: var(--color-status-pending); color: var(--gray-900); }
+.badge-success { background: var(--color-status-success); }
+.badge-danger  { background: var(--color-status-danger); }
+.badge-info    { background: var(--color-status-info); }
+
+/* ---------- Navbar (bande de marque jaune) ---------- */
+.navbar {
+    background: linear-gradient(90deg, var(--yellow-400), var(--yellow-200));
+    box-shadow: var(--shadow-nav);
+    padding: 14px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.navbar-brand { display: flex; align-items: center; gap: 10px; }
+.navbar-title { font-family: var(--font-display); font-weight: 700; color: var(--color-primary); font-size: 18px; }
+.navbar-links { display: flex; align-items: center; gap: 22px; }
+.navbar-links a, .navbar-links button {
+    color: var(--color-primary); font-weight: 600; font-size: 14px;
+    text-decoration: none; background: none; border: none; cursor: pointer;
+}
+.navbar-links a:hover, .navbar-links button:hover { text-decoration: underline; }
+
+/* ---------- Panneau de marque (login split screen) ---------- */
+.brand-panel {
+    background: radial-gradient(circle at 30% 20%, var(--yellow-200), var(--yellow-400) 70%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: var(--space-xl); text-align: center; color: var(--gray-900);
+}
+
+/* ---------- Layout generique page centree ---------- */
+.page-centered {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: var(--color-bg); padding: var(--space-lg);
+}
