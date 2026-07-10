@@ -80,5 +80,26 @@ public class ContratClientServiceImpl implements ContratClientService {
         repository.deleteById(id);
 
     }
+    @Override
+    // A ajouter/adapter dans ContratClientServiceImpl.java
+    private final ClientRepository clientRepository; // import ma.barid.backend.auth.repository.ClientRepository (lecture seule)
+    private final GrilleRemiseRepository grilleRemiseRepository;
+
+    public ContratClientDTO save(ContratClientDTO dto) {
+        ContratClient contrat = mapper.toEntity(dto);
+
+        if (dto.getClientId() != null) {
+            Client client = clientRepository.findById(dto.getClientId())
+                    .orElseThrow(() -> new RuntimeException("Client introuvable"));
+            contrat.setClient(client);
+        }
+        if (dto.getGrilleRemiseId() != null) {
+            GrilleRemise grille = grilleRemiseRepository.findById(dto.getGrilleRemiseId())
+                    .orElseThrow(() -> new RuntimeException("Grille de remise introuvable"));
+            contrat.setGrilleRemise(grille);
+        }
+
+        return mapper.toDTO(contratClientRepository.save(contrat));
+    }
 
 }

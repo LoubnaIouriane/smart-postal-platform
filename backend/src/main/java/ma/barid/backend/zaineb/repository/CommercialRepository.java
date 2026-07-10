@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CommercialRepository extends JpaRepository<Commercial, Long> {
-
+    boolean existsByIdentifiant(String identifiant);
 }

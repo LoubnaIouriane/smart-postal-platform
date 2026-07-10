@@ -1,65 +1,34 @@
 package ma.barid.backend.zaineb.controller;
 
-import ma.barid.backend.zaineb.entity.GrilleRemise;
-import ma.barid.backend.zaineb.repository.GrilleRemiseRepository;
-
+import lombok.RequiredArgsConstructor;
+import ma.barid.backend.zaineb.dto.GrilleRemiseDTO;
+import ma.barid.backend.zaineb.service.GrilleRemiseService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/grilles-remise")
-@CrossOrigin("*")
+@RequestMapping("/commercial/grilles-remise")
+@RequiredArgsConstructor
 public class GrilleRemiseController {
 
-    private final GrilleRemiseRepository grilleRepository;
-
-
-    public GrilleRemiseController(GrilleRemiseRepository grilleRepository) {
-        this.grilleRepository = grilleRepository;
-    }
-
+    private final GrilleRemiseService grilleRemiseService;
 
     @GetMapping
-    public List<GrilleRemise> getAllGrilles() {
-        return grilleRepository.findAll();
-    }
-
+    public List getAll() { return grilleRemiseService.getAll(); }
 
     @GetMapping("/{id}")
-    public GrilleRemise getGrilleById(@PathVariable Long id) {
-
-        return grilleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Grille remise introuvable"));
-    }
-
+    public GrilleRemiseDTO getById(@PathVariable Long id) { return grilleRemiseService.getById(id); }
 
     @PostMapping
-    public GrilleRemise createGrille(
-            @RequestBody GrilleRemise grille) {
-
-        return grilleRepository.save(grille);
-    }
-
+    public GrilleRemiseDTO create(@RequestBody GrilleRemiseDTO dto) { return grilleRemiseService.save(dto); }
 
     @PutMapping("/{id}")
-    public GrilleRemise updateGrille(
-            @PathVariable Long id,
-            @RequestBody GrilleRemise grille) {
-
-        GrilleRemise existing = grilleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Grille remise introuvable"));
-
-        existing.setNomGrille(grille.getNomGrille());
-        existing.setTauxRemise(grille.getTauxRemise());
-
-        return grilleRepository.save(existing);
+    public GrilleRemiseDTO update(@PathVariable Long id, @RequestBody GrilleRemiseDTO dto) {
+        dto.setIdGrille(id);
+        return grilleRemiseService.save(dto);
     }
-
 
     @DeleteMapping("/{id}")
-    public void deleteGrille(@PathVariable Long id) {
-
-        grilleRepository.deleteById(id);
-    }
+    public void delete(@PathVariable Long id) { grilleRemiseService.delete(id); }
 }
