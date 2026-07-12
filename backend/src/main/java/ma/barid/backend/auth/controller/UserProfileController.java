@@ -1,11 +1,15 @@
 package ma.barid.backend.auth.controller;
 
+
+
 import ma.barid.backend.auth.dto.ChangePasswordRequest;
 import ma.barid.backend.auth.dto.UserProfileResponse;
 import ma.barid.backend.auth.entity.Utilisateur;
 import ma.barid.backend.auth.repository.UtilisateurRepository;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;

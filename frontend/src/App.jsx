@@ -1,4 +1,26 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+<<<<<<< HEAD
+
+import CommercialList from "./pages/commercial/CommercialList";
+
+
+function App() {
+
+  return (
+      <BrowserRouter>
+
+        <Routes>
+
+          <Route
+              path="/commercial/liste"
+              element={<CommercialList />}
+          />
+
+        </Routes>
+
+      </BrowserRouter>
+  );
+=======
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
@@ -32,6 +54,7 @@ function App() {
             </BrowserRouter>
         </AuthProvider>
     );
+>>>>>>> origin/feature/auth
 }
 
 export default App;
