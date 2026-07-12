@@ -1,7 +1,5 @@
 package ma.barid.backend.auth.controller;
 
-import ma.barid.backend.auth.dto.ForgotPasswordRequest;
-import ma.barid.backend.auth.dto.ResetPasswordRequest;
 import ma.barid.backend.auth.entity.PasswordResetToken;
 import ma.barid.backend.auth.entity.Utilisateur;
 import ma.barid.backend.auth.repository.PasswordResetTokenRepository;
@@ -10,6 +8,8 @@ import ma.barid.backend.auth.service.EmailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import ma.barid.backend.auth.dto.ResetPasswordRequest;
+import ma.barid.backend.auth.dto.ForgotPasswordRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
