@@ -4,15 +4,15 @@
     --blue-100: #D2E1F0;
     --blue-300: #7EA9D3;
     --blue-400: #3D6EA5;
-    --blue-500: #0B3D6B;
-    --blue-600: #092F54;
+    --blue-500: #14315C;
+    --blue-600: #0F2646;
 
-    /* Jaune (marque) */
-    --yellow-50:  #FFF8E6;
-    --yellow-200: #FFE49A;
-    --yellow-400: #FFC72C;
-    --yellow-500: #E0A800;
-    --yellow-600: #B98600;
+    /* Orange (marque) */
+    --orange-50:  #FEF1EA;
+    --orange-200: #FBCBAE;
+    --orange-400: #F26522;
+    --orange-500: #D9531A;
+    --orange-600: #B84413;
 
     /* Gris */
     --gray-50:  #F4F5F7;
@@ -27,8 +27,8 @@
     --color-primary-hover: var(--blue-600);
     --color-primary-light: var(--blue-400);
 
-    --color-brand: var(--yellow-400);
-    --color-brand-hover: var(--yellow-500);
+    --color-brand: var(--orange-400);
+    --color-brand-hover: var(--orange-500);
 
     --color-bg: var(--gray-50);
     --color-surface: #FFFFFF;
@@ -37,7 +37,7 @@
     --color-text: var(--gray-900);
     --color-text-muted: var(--gray-500);
 
-    --color-status-pending: var(--yellow-400);
+    --color-status-pending: var(--orange-400);
     --color-status-success: #2F9E63;
     --color-status-danger: #D9534F;
     --color-status-info: var(--blue-400);
@@ -48,7 +48,7 @@
     --space-xs: 4px; --space-sm: 8px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px;
     --radius-sm: 8px; --radius-md: 14px;
 
-    --shadow-card: 0 4px 16px rgba(11, 61, 107, 0.08);
+    --shadow-card: 0 4px 16px rgba(20, 49, 92, 0.08);
     --shadow-nav: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 

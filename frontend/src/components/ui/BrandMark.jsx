@@ -4,14 +4,14 @@ export default function BrandMark({ size = 44 }) {
             <circle cx="32" cy="32" r="32" fill="var(--color-primary)" />
             <path
                 d="M18 26 L32 36 L46 26"
-                stroke="#FFC72C"
+                stroke="var(--color-brand)"
                 strokeWidth="4"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 fill="none"
             />
             <rect x="16" y="20" width="32" height="22" rx="3"
-                  stroke="#FFC72C" strokeWidth="4" fill="none" />
+                  stroke="var(--color-brand)" strokeWidth="4" fill="none" />
         </svg>
     );
 }
