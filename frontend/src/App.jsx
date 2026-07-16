@@ -6,6 +6,7 @@ import Login from "./pages/auth/Login";
 import PreInscription from "./pages/auth/PreInscription";
 import Dashboard from "./pages/auth/Dashboard";
 import Profile from "./pages/auth/Profile";
+import ExpeditionPage from "./pages/expedition/ExpeditionPage";
 
 function App() {
     return (
@@ -27,6 +28,14 @@ function App() {
 
                     <Route path="/profile" element={
                         <ProtectedRoute allowedRoles={["CLIENT", "COMMERCIAL", "FACTEUR"]}><Profile /></ProtectedRoute>
+                    } />
+
+                    {/* Route temporaire pour tester sans authentification */}
+                    <Route path="/test-expedition" element={<ExpeditionPage />} />
+
+                    {/* Route finale, protégée, pour utilisation réelle */}
+                    <Route path="/client/expeditions" element={
+                        <ProtectedRoute allowedRoles={["CLIENT"]}><ExpeditionPage /></ProtectedRoute>
                     } />
                 </Routes>
             </BrowserRouter>

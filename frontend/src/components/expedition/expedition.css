@@ -1,0 +1,119 @@
+:root {
+    --amana-blue: #1B3F76;
+    --amana-orange: #F4731D;
+    --amana-white: #FFFFFF;
+    --amana-gray: #F5F6F8;
+}
+
+.expedition-form {
+    background: var(--amana-white);
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 24px;
+    max-width: 480px;
+    box-shadow: 0 2px 8px rgba(27, 63, 118, 0.08);
+}
+
+.expedition-form h2 {
+    color: var(--amana-blue);
+    margin-bottom: 16px;
+}
+
+.form-group {
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: var(--amana-blue);
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--amana-orange);
+}
+
+.expedition-form button {
+    background: var(--amana-orange);
+    color: var(--amana-white);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+}
+
+.expedition-form button:hover {
+    background: #d9631a;
+}
+
+.expedition-form button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.expedition-error {
+    color: #c0392b;
+    background: #fdecea;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.expedition-list {
+    background: var(--amana-white);
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(27, 63, 118, 0.08);
+}
+
+.expedition-list h2 {
+    color: var(--amana-blue);
+    margin-bottom: 16px;
+}
+
+.expedition-list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.expedition-list th {
+    background: var(--amana-blue);
+    color: var(--amana-white);
+    text-align: left;
+    padding: 10px;
+    font-size: 13px;
+}
+
+.expedition-list td {
+    padding: 10px;
+    border-bottom: 1px solid var(--amana-gray);
+    font-size: 14px;
+}
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-attente { background: #FFF3E0; color: var(--amana-orange); }
+.badge-validee { background: #E3F2E1; color: #2E7D32; }
+.badge-annulee { background: #FBE3E3; color: #C0392B; }
+.badge-collectee { background: #E3EAF6; color: var(--amana-blue); }
