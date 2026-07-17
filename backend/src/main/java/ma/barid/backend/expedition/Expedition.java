@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
+import ma.barid.backend.auth.entity.Ville;
 
 import java.time.LocalDateTime;
 
@@ -31,9 +32,13 @@ public class Expedition {
 
     private Double poids;
 
-    private String villeDepart;
+    @ManyToOne
+    @JoinColumn(name = "id_ville_depart", nullable = false)
+    private Ville villeDepart;
 
-    private String villeDestination;
+    @ManyToOne
+    @JoinColumn(name = "id_ville_destination", nullable = false)
+    private Ville villeDestination;
 
     private String nomDestinataire;
 
@@ -44,4 +49,6 @@ public class Expedition {
     private LocalDateTime dateCreation;
 
     private LocalDateTime dateAnnulation;
+
+    private java.math.BigDecimal montant;
 }

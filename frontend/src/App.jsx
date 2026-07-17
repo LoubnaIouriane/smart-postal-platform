@@ -7,6 +7,7 @@ import PreInscription from "./pages/auth/PreInscription";
 import Dashboard from "./pages/auth/Dashboard";
 import Profile from "./pages/auth/Profile";
 import ExpeditionPage from "./pages/expedition/ExpeditionPage";
+import CommercialList from "./pages/commercial/CommercialList";
 
 function App() {
     return (
@@ -37,6 +38,8 @@ function App() {
                     <Route path="/client/expeditions" element={
                         <ProtectedRoute allowedRoles={["CLIENT"]}><ExpeditionPage /></ProtectedRoute>
                     } />
+
+                    <Route path="/commercial/liste" element={<CommercialList />} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>
