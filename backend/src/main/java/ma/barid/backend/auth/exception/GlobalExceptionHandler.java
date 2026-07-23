@@ -19,10 +19,10 @@ public class GlobalExceptionHandler {
     // Toutes les RuntimeException "metier" (identifiant deja utilise, role invalide, etc.)
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleRuntime(RuntimeException ex) {
-        ErrorResponse error = ErrorResponse.builder()
-                .status(HttpStatus.BAD_REQUEST.value())
-                .message(ex.getMessage())
-                .timestamp(LocalDateTime.now())
+        ErrorResponse error = ErrorResponse.builder() // Creating the error response
+                .status(HttpStatus.BAD_REQUEST.value()) //Setting the status
+                .message(ex.getMessage()) //Setting message
+                .timestamp(LocalDateTime.now()) //Setting time
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
         Map<String, String> errors = new HashMap<>();
         for (FieldError fe : ex.getBindingResult().getFieldErrors()) {
             errors.put(fe.getField(), fe.getDefaultMessage());
-        }
+        }  //Gets all validation results , returns errors for each field.
         return ResponseEntity.badRequest().body(errors);
     }
 

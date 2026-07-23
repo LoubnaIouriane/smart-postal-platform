@@ -21,6 +21,14 @@ export default function Navbar() {
             <div className="navbar-links">
                 {isAuthenticated ? (
                     <>
+                        {role === "ADMIN" && (
+                            <>
+                                <a href="/admin/dashboard">Tableau de bord</a>
+                                <a href="/admin/agences">Agences</a>
+                                <a href="/admin/commerciaux">Commerciaux</a>
+                                <a href="/admin/facteurs">Facteurs</a>
+                            </>
+                        )}
                         <span style={{ fontSize: 13, color: "var(--gray-900)" }}>Rôle : {role}</span>
                         <a href="/profile">Mon profil</a>
                         <button onClick={handleLogout}>Se déconnecter</button>

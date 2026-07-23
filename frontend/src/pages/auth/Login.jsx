@@ -15,7 +15,8 @@ export default function Login() {
         setError("");
         try {
             const data = await login(identifiant, motDePasse);
-            if (data.role === "CLIENT") navigate("/client/dashboard");
+            if (data.role === "ADMIN") navigate("/admin/dashboard");
+            else if (data.role === "CLIENT") navigate("/client/dashboard");
             else if (data.role === "COMMERCIAL") navigate("/commercial/dashboard");
             else if (data.role === "FACTEUR") navigate("/facteur/dashboard");
             else navigate("/");
