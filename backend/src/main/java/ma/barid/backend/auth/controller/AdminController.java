@@ -17,13 +17,11 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    // ---- Dashboard ----
     @GetMapping("/dashboard/stats")
     public ResponseEntity<DashboardStatsResponse> stats() {
         return ResponseEntity.ok(adminService.getDashboardStats());
     }
 
-    // ---- Villes (pour les selects du frontend) ----
     @GetMapping("/villes")
     public ResponseEntity<List<VilleResponse>> listVilles() {
         return ResponseEntity.ok(adminService.listVilles());
@@ -41,13 +39,13 @@ public class AdminController {
     }
 
     @PutMapping("/agences/{idAgence}")
-    public ResponseEntity<AgenceResponse> updateAgence(@PathVariable String idAgence,
+    public ResponseEntity<AgenceResponse> updateAgence(@PathVariable Long idAgence,
                                                        @Valid @RequestBody AgenceRequest request) {
         return ResponseEntity.ok(adminService.updateAgence(idAgence, request));
     }
 
     @DeleteMapping("/agences/{idAgence}")
-    public ResponseEntity<String> deleteAgence(@PathVariable String idAgence) {
+    public ResponseEntity<String> deleteAgence(@PathVariable Long idAgence) {
         adminService.deleteAgence(idAgence);
         return ResponseEntity.ok("Agence supprimee avec succes");
     }

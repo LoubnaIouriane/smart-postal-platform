@@ -4,13 +4,13 @@ import lombok.*;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class FacteurResponse {
-    private Long idUtilisateur;
+    private Long idFacteur;
     private String nom;
     private String prenom;
     private String identifiant;
     private String email;
     private String telephone;
-    private String idAgence;
+    private Long idAgence;
     private String nomAgence;
     private Boolean actif;
 }
