@@ -13,8 +13,8 @@ public interface AdminService {
     // ---- Agences ----
     List<AgenceResponse> listAgences();
     AgenceResponse createAgence(AgenceRequest request);
-    AgenceResponse updateAgence(String idAgence, AgenceRequest request);
-    void deleteAgence(String idAgence);
+    AgenceResponse updateAgence(Long idAgence, AgenceRequest request);
+    void deleteAgence(Long idAgence);
 
     // ---- Commerciaux ----
     List<CommercialResponse> listCommerciaux();

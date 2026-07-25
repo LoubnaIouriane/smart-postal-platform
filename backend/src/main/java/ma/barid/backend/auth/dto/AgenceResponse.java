@@ -4,13 +4,21 @@ import lombok.*;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class AgenceResponse {
-    private String idAgence;
+    private Long idAgence;
     private String nomAgence;
     private String adresse;
-    private String codePostal;
     private String telephone;
     private String email;
-    private String contactCommercial;
     private Long idVille;
     private String nomVille;
+
+    private boolean hasCommercial;
+    private String nomCommercial;
+    private String telephoneCommercial;
+    private String emailCommercial;
+
+    private boolean hasFacteur;
+    private String nomFacteur;
+    private String telephoneFacteur;
+    private String emailFacteur;
 }

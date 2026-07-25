@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../../components/layout/Navbar";
-import Card from "../../components/ui/Card";
+import AdminLayout from "../../components/layout/AdminLayout";
 import { adminService } from "../../services/adminService";
 
 export default function AdminDashboard() {
@@ -11,63 +10,31 @@ export default function AdminDashboard() {
         adminService.getStats().then(setStats).catch(() => setStats(null));
     }, []);
 
+    const cards = [
+        { label: "Clients", value: stats?.nombreClients, to: null },
+        { label: "Commerciaux", value: stats?.nombreCommerciaux, to: "/admin/commerciaux" },
+        { label: "Facteurs", value: stats?.nombreFacteurs, to: "/admin/facteurs" },
+        { label: "Agences", value: stats?.nombreAgences, to: "/admin/agences" },
+    ];
+
     return (
-        <>
-            <Navbar />
-            <div style={{ padding: "var(--space-xl)" }}>
-                <h1 style={{ marginBottom: 24 }}>Tableau de bord — Administrateur</h1>
+        <AdminLayout>
+            <h1>Tableau de bord</h1>
+            <p className="page-subtitle">Vue d'ensemble de la plateforme Smart Postal Platform</p>
 
-                <div style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-                    gap: "var(--space-md)",
-                    marginBottom: 32,
-                }}>
-                    <Card title="Clients">
-                        <p style={{ fontSize: 32, fontWeight: 700 }}>{stats?.nombreClients ?? "…"}</p>
-                    </Card>
-                    <Card title="Commerciaux">
-                        <p style={{ fontSize: 32, fontWeight: 700 }}>{stats?.nombreCommerciaux ?? "…"}</p>
-                    </Card>
-                    <Card title="Facteurs">
-                        <p style={{ fontSize: 32, fontWeight: 700 }}>{stats?.nombreFacteurs ?? "…"}</p>
-                    </Card>
-                    <Card title="Agences">
-                        <p style={{ fontSize: 32, fontWeight: 700 }}>{stats?.nombreAgences ?? "…"}</p>
-                    </Card>
-                </div>
-
-                <div style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-                    gap: "var(--space-md)",
-                }}>
-                    <Link to="/admin/agences" style={{ textDecoration: "none", color: "inherit" }}>
-                        <Card>
-                            <h3 style={{ fontSize: 16, marginBottom: 8 }}>Gérer les agences</h3>
-                            <p style={{ fontSize: 13, color: "var(--color-text-muted)", margin: 0 }}>
-                                Ajouter, modifier, supprimer une agence
-                            </p>
-                        </Card>
-                    </Link>
-                    <Link to="/admin/commerciaux" style={{ textDecoration: "none", color: "inherit" }}>
-                        <Card>
-                            <h3 style={{ fontSize: 16, marginBottom: 8 }}>Gérer les commerciaux</h3>
-                            <p style={{ fontSize: 13, color: "var(--color-text-muted)", margin: 0 }}>
-                                Ajouter, modifier, supprimer un commercial
-                            </p>
-                        </Card>
-                    </Link>
-                    <Link to="/admin/facteurs" style={{ textDecoration: "none", color: "inherit" }}>
-                        <Card>
-                            <h3 style={{ fontSize: 16, marginBottom: 8 }}>Gérer les facteurs</h3>
-                            <p style={{ fontSize: 13, color: "var(--color-text-muted)", margin: 0 }}>
-                                Ajouter, modifier, supprimer un facteur
-                            </p>
-                        </Card>
-                    </Link>
-                </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 18 }}>
+                {cards.map((c) => {
+                    const content = (
+                        <div className="stat-card" key={c.label}>
+                            <div className="stat-label">{c.label}</div>
+                            <div className="stat-value">{c.value ?? "…"}</div>
+                        </div>
+                    );
+                    return c.to ? (
+                        <Link key={c.label} to={c.to} style={{ textDecoration: "none" }}>{content}</Link>
+                    ) : content;
+                })}
             </div>
-        </>
+        </AdminLayout>
     );
 }

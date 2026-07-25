@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -43,7 +44,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     // =========================================================
-    // VILLES (lecture seule, pour les listes deroulantes)
+    // VILLES
     // =========================================================
     @Override
     public List<VilleResponse> listVilles() {
@@ -69,29 +70,38 @@ public class AdminServiceImpl implements AdminService {
         Ville ville = villeRepository.findById(request.getIdVille())
                 .orElseThrow(() -> new RuntimeException("Ville introuvable"));
 
-        if (agenceRepository.findByVille(ville).isPresent()) {
-            throw new RuntimeException("Cette ville possede deja une agence");
-        }
-
-        String idAgence = genererIdAgence();
-
         Agence agence = Agence.builder()
-                .idAgence(idAgence)
                 .nomAgence(request.getNomAgence())
                 .adresse(request.getAdresse())
-                .codePostal(request.getCodePostal())
                 .telephone(request.getTelephone())
                 .email(request.getEmail())
-                .contactCommercial(request.getContactCommercial())
                 .ville(ville)
                 .build();
-
         agenceRepository.save(agence);
+
+        // Creation optionnelle du commercial en meme temps que l'agence
+        if (estRempli(request.getCommercialNom())) {
+            if (!estRempli(request.getCommercialEmail())) {
+                throw new RuntimeException("L'email du commercial est obligatoire si son nom est renseigne");
+            }
+            creerCommercialPourAgence(agence, request.getCommercialNom(), request.getCommercialPrenom(),
+                    request.getCommercialTelephone(), request.getCommercialEmail());
+        }
+
+        // Creation optionnelle du facteur en meme temps que l'agence
+        if (estRempli(request.getFacteurNom())) {
+            if (!estRempli(request.getFacteurEmail())) {
+                throw new RuntimeException("L'email du facteur est obligatoire si son nom est renseigne");
+            }
+            creerFacteurPourAgence(agence, request.getFacteurNom(), request.getFacteurPrenom(),
+                    request.getFacteurTelephone(), request.getFacteurEmail());
+        }
+
         return toAgenceResponse(agence);
     }
 
     @Override
-    public AgenceResponse updateAgence(String idAgence, AgenceRequest request) {
+    public AgenceResponse updateAgence(Long idAgence, AgenceRequest request) {
         Agence agence = agenceRepository.findById(idAgence)
                 .orElseThrow(() -> new RuntimeException("Agence introuvable"));
         Ville ville = villeRepository.findById(request.getIdVille())
@@ -99,10 +109,8 @@ public class AdminServiceImpl implements AdminService {
 
         agence.setNomAgence(request.getNomAgence());
         agence.setAdresse(request.getAdresse());
-        agence.setCodePostal(request.getCodePostal());
         agence.setTelephone(request.getTelephone());
         agence.setEmail(request.getEmail());
-        agence.setContactCommercial(request.getContactCommercial());
         agence.setVille(ville);
 
         agenceRepository.save(agence);
@@ -110,11 +118,24 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void deleteAgence(String idAgence) {
-        if (!agenceRepository.existsById(idAgence)) {
-            throw new RuntimeException("Agence introuvable");
+    public void deleteAgence(Long idAgence) {
+        Agence agence = agenceRepository.findById(idAgence)
+                .orElseThrow(() -> new RuntimeException("Agence introuvable"));
+
+        if (clientRepository.existsByAgence_IdAgence(idAgence)) {
+            throw new RuntimeException(
+                    "Impossible de supprimer cette agence : des clients y sont encore rattaches.");
         }
-        agenceRepository.deleteById(idAgence);
+        if (commercialRepository.existsByAgence_IdAgence(idAgence)) {
+            throw new RuntimeException(
+                    "Impossible de supprimer cette agence : un commercial y est encore affecte. Supprimez-le d'abord.");
+        }
+        if (facteurRepository.existsByAgence_IdAgence(idAgence)) {
+            throw new RuntimeException(
+                    "Impossible de supprimer cette agence : un facteur y est encore affecte. Supprimez-le d'abord.");
+        }
+
+        agenceRepository.delete(agence);
     }
 
     // =========================================================
@@ -127,34 +148,11 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public CommercialResponse createCommercial(CommercialRequest request) {
-        if (utilisateurRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Cet email est deja utilise");
-        }
         Agence agence = agenceRepository.findById(request.getIdAgence())
                 .orElseThrow(() -> new RuntimeException("Agence introuvable"));
-        Role role = roleRepository.findByNomRole(RoleName.COMMERCIAL.name())
-                .orElseThrow(() -> new RuntimeException("Role COMMERCIAL introuvable"));
 
-        String identifiant = genererIdentifiant("com", request.getNom());
-        String motDePasseClair = genererMotDePasseAleatoire();
-
-        Commercial commercial = Commercial.builder()
-                .nom(request.getNom())
-                .prenom(request.getPrenom())
-                .telephone(request.getTelephone())
-                .email(request.getEmail())
-                .identifiant(identifiant)
-                .motDePasse(passwordEncoder.encode(motDePasseClair))
-                .actif(true)
-                .dateCreation(LocalDateTime.now())
-                .role(role)
-                .agence(agence)
-                .build();
-
-        commercialRepository.save(commercial);
-
-        // Envoi des identifiants generes par email
-        emailService.envoyerIdentifiants(commercial.getEmail(), identifiant, motDePasseClair);
+        Commercial commercial = creerCommercialPourAgence(agence, request.getNom(), request.getPrenom(),
+                request.getTelephone(), request.getEmail());
 
         return toCommercialResponse(commercial);
     }
@@ -163,19 +161,27 @@ public class AdminServiceImpl implements AdminService {
     public CommercialResponse updateCommercial(Long id, CommercialRequest request) {
         Commercial commercial = commercialRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Commercial introuvable"));
-        Agence agence = agenceRepository.findById(request.getIdAgence())
+
+        Agence nouvelleAgence = agenceRepository.findById(request.getIdAgence())
                 .orElseThrow(() -> new RuntimeException("Agence introuvable"));
+
+        boolean changeAgence = !commercial.getAgence().getIdAgence().equals(nouvelleAgence.getIdAgence());
+        if (changeAgence && commercialRepository.existsByAgence_IdAgence(nouvelleAgence.getIdAgence())) {
+            throw new RuntimeException("Cette agence a deja un commercial affecte");
+        }
 
         commercial.setNom(request.getNom());
         commercial.setPrenom(request.getPrenom());
         commercial.setTelephone(request.getTelephone());
-        commercial.setAgence(agence);
+        commercial.setAgence(nouvelleAgence);
 
-        if (!commercial.getEmail().equalsIgnoreCase(request.getEmail())) {
+        Utilisateur utilisateur = commercial.getUtilisateur();
+        if (!utilisateur.getEmail().equalsIgnoreCase(request.getEmail())) {
             if (utilisateurRepository.existsByEmail(request.getEmail())) {
                 throw new RuntimeException("Cet email est deja utilise");
             }
-            commercial.setEmail(request.getEmail());
+            utilisateur.setEmail(request.getEmail());
+            utilisateurRepository.save(utilisateur);
         }
 
         commercialRepository.save(commercial);
@@ -184,10 +190,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void deleteCommercial(Long id) {
-        if (!commercialRepository.existsById(id)) {
-            throw new RuntimeException("Commercial introuvable");
-        }
-        commercialRepository.deleteById(id);
+        Commercial commercial = commercialRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Commercial introuvable"));
+        commercialRepository.delete(commercial); // cascade -> supprime aussi le compte de connexion
     }
 
     // =========================================================
@@ -200,33 +205,11 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public FacteurResponse createFacteur(FacteurRequest request) {
-        if (utilisateurRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Cet email est deja utilise");
-        }
         Agence agence = agenceRepository.findById(request.getIdAgence())
                 .orElseThrow(() -> new RuntimeException("Agence introuvable"));
-        Role role = roleRepository.findByNomRole(RoleName.FACTEUR.name())
-                .orElseThrow(() -> new RuntimeException("Role FACTEUR introuvable"));
 
-        String identifiant = genererIdentifiant("fac", request.getNom());
-        String motDePasseClair = genererMotDePasseAleatoire();
-
-        Facteur facteur = Facteur.builder()
-                .nom(request.getNom())
-                .prenom(request.getPrenom())
-                .telephone(request.getTelephone())
-                .email(request.getEmail())
-                .identifiant(identifiant)
-                .motDePasse(passwordEncoder.encode(motDePasseClair))
-                .actif(true)
-                .dateCreation(LocalDateTime.now())
-                .role(role)
-                .agence(agence)
-                .build();
-
-        facteurRepository.save(facteur);
-
-        emailService.envoyerIdentifiants(facteur.getEmail(), identifiant, motDePasseClair);
+        Facteur facteur = creerFacteurPourAgence(agence, request.getNom(), request.getPrenom(),
+                request.getTelephone(), request.getEmail());
 
         return toFacteurResponse(facteur);
     }
@@ -235,19 +218,27 @@ public class AdminServiceImpl implements AdminService {
     public FacteurResponse updateFacteur(Long id, FacteurRequest request) {
         Facteur facteur = facteurRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Facteur introuvable"));
-        Agence agence = agenceRepository.findById(request.getIdAgence())
+
+        Agence nouvelleAgence = agenceRepository.findById(request.getIdAgence())
                 .orElseThrow(() -> new RuntimeException("Agence introuvable"));
+
+        boolean changeAgence = !facteur.getAgence().getIdAgence().equals(nouvelleAgence.getIdAgence());
+        if (changeAgence && facteurRepository.existsByAgence_IdAgence(nouvelleAgence.getIdAgence())) {
+            throw new RuntimeException("Cette agence a deja un facteur affecte");
+        }
 
         facteur.setNom(request.getNom());
         facteur.setPrenom(request.getPrenom());
         facteur.setTelephone(request.getTelephone());
-        facteur.setAgence(agence);
+        facteur.setAgence(nouvelleAgence);
 
-        if (!facteur.getEmail().equalsIgnoreCase(request.getEmail())) {
+        Utilisateur utilisateur = facteur.getUtilisateur();
+        if (!utilisateur.getEmail().equalsIgnoreCase(request.getEmail())) {
             if (utilisateurRepository.existsByEmail(request.getEmail())) {
                 throw new RuntimeException("Cet email est deja utilise");
             }
-            facteur.setEmail(request.getEmail());
+            utilisateur.setEmail(request.getEmail());
+            utilisateurRepository.save(utilisateur);
         }
 
         facteurRepository.save(facteur);
@@ -256,26 +247,94 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void deleteFacteur(Long id) {
-        if (!facteurRepository.existsById(id)) {
-            throw new RuntimeException("Facteur introuvable");
-        }
-        facteurRepository.deleteById(id);
+        Facteur facteur = facteurRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Facteur introuvable"));
+        facteurRepository.delete(facteur); // cascade -> supprime aussi le compte de connexion
     }
 
     // =========================================================
-    // HELPERS PRIVES
+    // HELPERS PRIVES REUTILISABLES
     // =========================================================
-    private String genererIdAgence() {
-        long count = agenceRepository.count() + 1;
-        String idAgence = String.format("AG%03d", count);
-        while (agenceRepository.existsById(idAgence)) {
-            count++;
-            idAgence = String.format("AG%03d", count);
-        }
-        return idAgence;
+    private boolean estRempli(String valeur) {
+        return valeur != null && !valeur.isBlank();
     }
 
-    /** Genere un identifiant unique du type "com" + nom + suffixe numerique. */
+    private Commercial creerCommercialPourAgence(Agence agence, String nom, String prenom,
+                                                 String telephone, String email) {
+        if (utilisateurRepository.existsByEmail(email)) {
+            throw new RuntimeException("Cet email est deja utilise");
+        }
+        if (commercialRepository.existsByAgence_IdAgence(agence.getIdAgence())) {
+            throw new RuntimeException("Cette agence a deja un commercial affecte");
+        }
+
+        Role role = roleRepository.findByNomRole(RoleName.COMMERCIAL.name())
+                .orElseThrow(() -> new RuntimeException("Role COMMERCIAL introuvable"));
+
+        String identifiant = genererIdentifiant("com", nom);
+        String motDePasseClair = genererMotDePasseAleatoire();
+
+        Utilisateur utilisateur = Utilisateur.builder()
+                .identifiant(identifiant)
+                .motDePasse(passwordEncoder.encode(motDePasseClair))
+                .email(email)
+                .actif(true)
+                .dateCreation(LocalDateTime.now())
+                .role(role)
+                .build();
+        utilisateurRepository.save(utilisateur);
+
+        Commercial commercial = Commercial.builder()
+                .nom(nom)
+                .prenom(prenom)
+                .telephone(telephone)
+                .utilisateur(utilisateur)
+                .agence(agence)
+                .build();
+        commercialRepository.save(commercial);
+
+        emailService.envoyerIdentifiants(email, identifiant, motDePasseClair);
+        return commercial;
+    }
+
+    private Facteur creerFacteurPourAgence(Agence agence, String nom, String prenom,
+                                           String telephone, String email) {
+        if (utilisateurRepository.existsByEmail(email)) {
+            throw new RuntimeException("Cet email est deja utilise");
+        }
+        if (facteurRepository.existsByAgence_IdAgence(agence.getIdAgence())) {
+            throw new RuntimeException("Cette agence a deja un facteur affecte");
+        }
+
+        Role role = roleRepository.findByNomRole(RoleName.FACTEUR.name())
+                .orElseThrow(() -> new RuntimeException("Role FACTEUR introuvable"));
+
+        String identifiant = genererIdentifiant("fac", nom);
+        String motDePasseClair = genererMotDePasseAleatoire();
+
+        Utilisateur utilisateur = Utilisateur.builder()
+                .identifiant(identifiant)
+                .motDePasse(passwordEncoder.encode(motDePasseClair))
+                .email(email)
+                .actif(true)
+                .dateCreation(LocalDateTime.now())
+                .role(role)
+                .build();
+        utilisateurRepository.save(utilisateur);
+
+        Facteur facteur = Facteur.builder()
+                .nom(nom)
+                .prenom(prenom)
+                .telephone(telephone)
+                .utilisateur(utilisateur)
+                .agence(agence)
+                .build();
+        facteurRepository.save(facteur);
+
+        emailService.envoyerIdentifiants(email, identifiant, motDePasseClair);
+        return facteur;
+    }
+
     private String genererIdentifiant(String prefixe, String nom) {
         String base = (prefixe + nom).toLowerCase().replaceAll("[^a-z0-9]", "");
         if (base.length() > 8) base = base.substring(0, 8);
@@ -290,50 +349,58 @@ public class AdminServiceImpl implements AdminService {
         return identifiant;
     }
 
-    /** Genere un mot de passe temporaire aleatoire de 10 caracteres. */
     private String genererMotDePasseAleatoire() {
         return UUID.randomUUID().toString().replace("-", "").substring(0, 10);
     }
 
     private AgenceResponse toAgenceResponse(Agence a) {
+        Optional<Commercial> commercial = commercialRepository.findByAgence_IdAgence(a.getIdAgence());
+        Optional<Facteur> facteur = facteurRepository.findByAgence_IdAgence(a.getIdAgence());
+
         return AgenceResponse.builder()
                 .idAgence(a.getIdAgence())
                 .nomAgence(a.getNomAgence())
                 .adresse(a.getAdresse())
-                .codePostal(a.getCodePostal())
                 .telephone(a.getTelephone())
                 .email(a.getEmail())
-                .contactCommercial(a.getContactCommercial())
                 .idVille(a.getVille().getIdVille())
                 .nomVille(a.getVille().getNomVille())
+                .hasCommercial(commercial.isPresent())
+                .nomCommercial(commercial.map(c -> c.getPrenom() + " " + c.getNom()).orElse(null))
+                .telephoneCommercial(commercial.map(Commercial::getTelephone).orElse(null))
+                .emailCommercial(commercial.map(c -> c.getUtilisateur().getEmail()).orElse(null))
+                .hasFacteur(facteur.isPresent())
+                .nomFacteur(facteur.map(f -> f.getPrenom() + " " + f.getNom()).orElse(null))
+                .telephoneFacteur(facteur.map(Facteur::getTelephone).orElse(null))
+                .emailFacteur(facteur.map(f -> f.getUtilisateur().getEmail()).orElse(null))
                 .build();
     }
 
     private CommercialResponse toCommercialResponse(Commercial c) {
         return CommercialResponse.builder()
-                .idUtilisateur(c.getIdUtilisateur())
+                .idCommercial(c.getIdCommercial())
                 .nom(c.getNom())
                 .prenom(c.getPrenom())
-                .identifiant(c.getIdentifiant())
-                .email(c.getEmail())
+                .identifiant(c.getUtilisateur().getIdentifiant())
+                .email(c.getUtilisateur().getEmail())
                 .telephone(c.getTelephone())
                 .idAgence(c.getAgence().getIdAgence())
                 .nomAgence(c.getAgence().getNomAgence())
-                .actif(c.getActif())
+                .actif(c.getUtilisateur().getActif())
                 .build();
     }
 
     private FacteurResponse toFacteurResponse(Facteur f) {
         return FacteurResponse.builder()
-                .idUtilisateur(f.getIdUtilisateur())
+                .idFacteur(f.getIdFacteur())
                 .nom(f.getNom())
                 .prenom(f.getPrenom())
-                .identifiant(f.getIdentifiant())
-                .email(f.getEmail())
+                .identifiant(f.getUtilisateur().getIdentifiant())
+                .email(f.getUtilisateur().getEmail())
                 .telephone(f.getTelephone())
                 .idAgence(f.getAgence().getIdAgence())
                 .nomAgence(f.getAgence().getNomAgence())
-                .actif(f.getActif())
+                .actif(f.getUtilisateur().getActif())
                 .build();
     }
 }

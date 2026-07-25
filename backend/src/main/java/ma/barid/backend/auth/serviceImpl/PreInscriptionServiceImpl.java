@@ -36,7 +36,7 @@ public class PreInscriptionServiceImpl implements PreInscriptionService {
                 .orElseThrow(() -> new RuntimeException("Ville invalide"));
 
         // Affectation automatique de l'agence selon la ville
-        Agence agence = agenceRepository.findByVille(ville)
+        Agence agence = agenceRepository.findFirstByVille(ville)
                 .orElseThrow(() -> new RuntimeException("Aucune agence trouvee pour cette ville"));
 
         Role roleClient = roleRepository.findByNomRole("CLIENT")

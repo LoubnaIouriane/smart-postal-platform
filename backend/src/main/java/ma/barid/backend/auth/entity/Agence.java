@@ -9,18 +9,18 @@ import lombok.*;
 public class Agence {
 
     @Id
-    private String idAgence; // ex : "C001"
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idAgence;
 
     @Column(nullable = false)
     private String nomAgence;
 
     private String adresse;
-    private String codePostal;
     private String telephone;
     private String email;
-    private String contactCommercial;
 
-    @OneToOne
-    @JoinColumn(name = "id_ville", nullable = false, unique = true)
+    // Une ville peut desormais avoir PLUSIEURS agences (ManyToOne, plus de OneToOne)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_ville", nullable = false)
     private Ville ville;
 }

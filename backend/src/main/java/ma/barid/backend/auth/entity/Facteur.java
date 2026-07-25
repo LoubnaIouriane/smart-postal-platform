@@ -2,15 +2,15 @@ package ma.barid.backend.auth.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "facteur")
-@PrimaryKeyJoinColumn(name = "id_utilisateur") // FK vers utilisateur.id_utilisateur
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
-@SuperBuilder
-@EqualsAndHashCode(callSuper = false)
-public class Facteur extends Utilisateur {
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+public class Facteur {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idFacteur;
 
     @Column(nullable = false)
     private String nom;
@@ -20,7 +20,12 @@ public class Facteur extends Utilisateur {
 
     private String telephone;
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_utilisateur", nullable = false, unique = true)
+    private Utilisateur utilisateur;
+
+    // unique = true : une agence ne peut avoir qu'UN SEUL facteur
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_agence", nullable = false)
+    @JoinColumn(name = "id_agence", nullable = false, unique = true)
     private Agence agence;
 }
