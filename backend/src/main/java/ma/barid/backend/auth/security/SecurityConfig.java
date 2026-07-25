@@ -46,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
 
                         // 🔒 PRIVATE ROUTES
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/commercial/**").hasRole("COMMERCIAL")
                         .requestMatchers("/facteur/**").hasRole("FACTEUR")
                         .requestMatchers("/client/**").hasRole("CLIENT")
