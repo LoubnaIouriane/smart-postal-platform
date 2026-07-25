@@ -1,12 +1,12 @@
 package ma.barid.backend.auth.controller;
 
-import ma.barid.backend.auth.dto.ClientListResponse;
 import ma.barid.backend.auth.entity.Client;
 import ma.barid.backend.auth.enums.StatutClient;
 import ma.barid.backend.auth.repository.ClientRepository;
 import ma.barid.backend.auth.service.AuthService;
 import ma.barid.backend.auth.service.EmailService;
 import lombok.RequiredArgsConstructor;
+import ma.barid.backend.auth.dto.ClientListResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
