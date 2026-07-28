@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import ma.barid.backend.auth.entity.Ville;
+import ma.barid.backend.facteur.Facteur;
 
 import java.time.LocalDateTime;
 
@@ -32,6 +33,8 @@ public class Expedition {
 
     private Double poids;
 
+    private Double poidsReel;
+
     @ManyToOne
     @JoinColumn(name = "id_ville_depart", nullable = false)
     private Ville villeDepart;
@@ -39,6 +42,10 @@ public class Expedition {
     @ManyToOne
     @JoinColumn(name = "id_ville_destination", nullable = false)
     private Ville villeDestination;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_facteur")
+    private Facteur facteurAssigne;
 
     private String nomDestinataire;
 

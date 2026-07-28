@@ -7,7 +7,9 @@ import PreInscription from "./pages/auth/PreInscription";
 import Dashboard from "./pages/auth/Dashboard";
 import Profile from "./pages/auth/Profile";
 import ExpeditionPage from "./pages/expedition/ExpeditionPage";
+import TrackingPage from "./pages/expedition/TrackingPage";
 import CommercialList from "./pages/commercial/CommercialList";
+import FacteurCollectePage from "./pages/facteur/FacteurCollectePage";
 
 function App() {
     return (
@@ -33,6 +35,8 @@ function App() {
 
                     {/* Route temporaire pour tester sans authentification */}
                     <Route path="/test-expedition" element={<ExpeditionPage />} />
+                    <Route path="/tracking" element={<TrackingPage />} />
+                    <Route path="/facteur/collecte" element={<FacteurCollectePage />} />
 
                     {/* Route finale, protégée, pour utilisation réelle */}
                     <Route path="/client/expeditions" element={

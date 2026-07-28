@@ -117,3 +117,65 @@
 .badge-validee { background: #E3F2E1; color: #2E7D32; }
 .badge-annulee { background: #FBE3E3; color: #C0392B; }
 .badge-collectee { background: #E3EAF6; color: var(--amana-blue); }
+.timeline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+}
+
+.timeline-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    flex: 1;
+}
+
+.timeline-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--amana-gray, #F5F6F8);
+    color: #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    border: 2px solid #DDE2E8;
+    z-index: 2;
+}
+
+.timeline-dot-active {
+    background: var(--amana-orange, #F4731D);
+    color: white;
+    border-color: var(--amana-orange, #F4731D);
+}
+
+.timeline-label {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--amana-blue, #1B3F76);
+    font-weight: 600;
+    text-align: center;
+}
+
+.timeline-line {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    width: 100%;
+    height: 3px;
+    background: #DDE2E8;
+    z-index: 1;
+}
+
+.timeline-line-active {
+    background: var(--amana-orange, #F4731D);
+}
+
+.timeline-annulee {
+    text-align: center;
+    padding: 20px 0;
+}

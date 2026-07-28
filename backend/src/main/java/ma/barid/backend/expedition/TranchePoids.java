@@ -20,10 +20,10 @@ public class TranchePoids {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idTranche;
 
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 10, scale = 3)
     private BigDecimal poidsMin;
 
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 10, scale = 3)
     private BigDecimal poidsMax;
 
     @Column(nullable = false)

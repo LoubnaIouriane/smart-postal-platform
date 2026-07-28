@@ -44,6 +44,7 @@ public class SecurityConfig {
                         // ✅ PUBLIC ROUTES
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                        .requestMatchers("/api/expeditions/**").permitAll() // TODO: restreindre par rôle une fois l'auth branchée
 
                         // 🔒 PRIVATE ROUTES
                         .requestMatchers("/commercial/**").hasRole("COMMERCIAL")
