@@ -10,6 +10,11 @@ public class ExpeditionRequest {
     private Double poids;
     private Long idVilleDepart;
     private Long idVilleDestination;
+
+    private String telephoneExpediteur;
+    private String adresseExpediteur;
+
     private String nomDestinataire;
     private String telephoneDestinataire;
+    private String adresseDestinataire;
 }

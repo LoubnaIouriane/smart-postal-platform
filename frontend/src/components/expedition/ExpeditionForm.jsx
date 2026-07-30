@@ -9,8 +9,11 @@ export default function ExpeditionForm({ onCreated }) {
         poids: "",
         idVilleDepart: "",
         idVilleDestination: "",
+        telephoneExpediteur: "",
+        adresseExpediteur: "",
         nomDestinataire: "",
         telephoneDestinataire: "",
+        adresseDestinataire: "",
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -37,8 +40,11 @@ export default function ExpeditionForm({ onCreated }) {
                 poids: "",
                 idVilleDepart: "",
                 idVilleDestination: "",
+                telephoneExpediteur: "",
+                adresseExpediteur: "",
                 nomDestinataire: "",
                 telephoneDestinataire: "",
+                adresseDestinataire: "",
             });
         } catch (err) {
             const message = err.response?.data?.error || "Erreur lors de la création de l'expédition.";
@@ -79,37 +85,49 @@ export default function ExpeditionForm({ onCreated }) {
 
             <div className="form-group">
                 <label>Ville de départ</label>
-                <select
-                    name="idVilleDepart"
-                    value={form.idVilleDepart}
-                    onChange={handleChange}
-                    required
-                >
+                <select name="idVilleDepart" value={form.idVilleDepart} onChange={handleChange} required>
                     <option value="">-- Sélectionner --</option>
                     {villes.map((v) => (
-                        <option key={v.idVille} value={v.idVille}>
-                            {v.nomVille}
-                        </option>
+                        <option key={v.idVille} value={v.idVille}>{v.nomVille}</option>
                     ))}
                 </select>
             </div>
 
             <div className="form-group">
                 <label>Ville de destination</label>
-                <select
-                    name="idVilleDestination"
-                    value={form.idVilleDestination}
-                    onChange={handleChange}
-                    required
-                >
+                <select name="idVilleDestination" value={form.idVilleDestination} onChange={handleChange} required>
                     <option value="">-- Sélectionner --</option>
                     {villes.map((v) => (
-                        <option key={v.idVille} value={v.idVille}>
-                            {v.nomVille}
-                        </option>
+                        <option key={v.idVille} value={v.idVille}>{v.nomVille}</option>
                     ))}
                 </select>
             </div>
+
+            <h3 style={{ marginTop: "20px", marginBottom: "8px", color: "var(--amana-blue)" }}>Expéditeur</h3>
+
+            <div className="form-group">
+                <label>Votre téléphone</label>
+                <input
+                    type="tel"
+                    name="telephoneExpediteur"
+                    value={form.telephoneExpediteur}
+                    onChange={handleChange}
+                    required
+                />
+            </div>
+
+            <div className="form-group">
+                <label>Votre adresse</label>
+                <input
+                    type="text"
+                    name="adresseExpediteur"
+                    value={form.adresseExpediteur}
+                    onChange={handleChange}
+                    required
+                />
+            </div>
+
+            <h3 style={{ marginTop: "20px", marginBottom: "8px", color: "var(--amana-blue)" }}>Destinataire</h3>
 
             <div className="form-group">
                 <label>Nom du destinataire</label>
@@ -128,6 +146,17 @@ export default function ExpeditionForm({ onCreated }) {
                     type="tel"
                     name="telephoneDestinataire"
                     value={form.telephoneDestinataire}
+                    onChange={handleChange}
+                    required
+                />
+            </div>
+
+            <div className="form-group">
+                <label>Adresse du destinataire</label>
+                <input
+                    type="text"
+                    name="adresseDestinataire"
+                    value={form.adresseDestinataire}
                     onChange={handleChange}
                     required
                 />

@@ -47,9 +47,14 @@ public class Expedition {
     @JoinColumn(name = "id_facteur")
     private Facteur facteurAssigne;
 
-    private String nomDestinataire;
+    // ===== Expéditeur (client) =====
+    private String telephoneExpediteur;
+    private String adresseExpediteur;
 
+    // ===== Destinataire =====
+    private String nomDestinataire;
     private String telephoneDestinataire;
+    private String adresseDestinataire;
 
     private LocalDateTime heureCollecte;
 

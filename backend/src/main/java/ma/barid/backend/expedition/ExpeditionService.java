@@ -57,8 +57,11 @@ public class ExpeditionService {
         expedition.setPoids(request.getPoids());
         expedition.setVilleDepart(depart);
         expedition.setVilleDestination(destination);
+        expedition.setTelephoneExpediteur(request.getTelephoneExpediteur());
+        expedition.setAdresseExpediteur(request.getAdresseExpediteur());
         expedition.setNomDestinataire(request.getNomDestinataire());
         expedition.setTelephoneDestinataire(request.getTelephoneDestinataire());
+        expedition.setAdresseDestinataire(request.getAdresseDestinataire());
         expedition.setCodeTracking(genererCodeTracking());
         expedition.setStatut(StatutExpedition.EN_ATTENTE);
         expedition.setDateCreation(LocalDateTime.now());
