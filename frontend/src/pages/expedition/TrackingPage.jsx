@@ -2,23 +2,39 @@ import { useState } from "react";
 import { expeditionService } from "../../services/expeditionService";
 import StatusTimeline from "../../components/expedition/StatusTimeline";
 import "../../components/expedition/expedition.css";
+import "../../components/expedition/tracking.css";
+
+const formatDate = (dateStr) => {
+    if (!dateStr) return "—";
+    const date = new Date(dateStr);
+    return date.toLocaleString("fr-FR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+};
 
 export default function TrackingPage() {
     const [code, setCode] = useState("");
     const [expedition, setExpedition] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [searched, setSearched] = useState(false);
 
     const handleSearch = async (e) => {
         e.preventDefault();
+        if (!code.trim()) return;
         setLoading(true);
         setError(null);
         setExpedition(null);
+        setSearched(true);
         try {
-            const result = await expeditionService.trackByCode(code.trim());
+            const result = await expeditionService.trackByCode(code.trim().toUpperCase());
             setExpedition(result);
         } catch (err) {
-            const message = err.response?.data?.error || "Expédition introuvable.";
+            const message = err.response?.data?.error || "Aucune expédition trouvée avec ce code.";
             setError(message);
         } finally {
             setLoading(false);
@@ -26,78 +42,121 @@ export default function TrackingPage() {
     };
 
     return (
-        <div style={{ padding: "24px", maxWidth: "600px", margin: "0 auto" }}>
-            <div className="expedition-form">
-                <h2>Suivi d'expédition</h2>
-                <form onSubmit={handleSearch}>
-                    <div className="form-group">
-                        <label>Code de tracking</label>
-                        <input
-                            type="text"
-                            placeholder="Ex: EXP000000001"
-                            value={code}
-                            onChange={(e) => setCode(e.target.value)}
-                            required
-                        />
-                    </div>
+        <div className="tracking-page">
+            <div className="tracking-hero">
+                <h1>Suivi d'expédition</h1>
+                <p>Entrez votre code de suivi pour connaître le statut de votre envoi</p>
+
+                <form className="tracking-search" onSubmit={handleSearch}>
+                    <input
+                        type="text"
+                        placeholder="EXP000000001"
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
+                    />
                     <button type="submit" disabled={loading}>
-                        {loading ? "Recherche..." : "Suivre l'expédition"}
+                        {loading ? "Recherche..." : "Suivre"}
                     </button>
                 </form>
-
-                {error && <p className="expedition-error" style={{ marginTop: "16px" }}>{error}</p>}
             </div>
 
+            {error && (
+                <div className="tracking-result">
+                    <div className="tracking-error-box">
+                        <span className="tracking-error-icon">⚠</span>
+                        <div>
+                            <strong>Expédition introuvable</strong>
+                            <p>{error}</p>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {expedition && (
-                <div className="expedition-list" style={{ marginTop: "24px" }}>
-                    <h2>Détails de l'expédition</h2>
+                <div className="tracking-result">
+                    <div className="tracking-card">
+                        <div className="tracking-card-header">
+                            <div>
+                                <span className="tracking-code-label">Code de suivi</span>
+                                <h2>{expedition.codeTracking}</h2>
+                            </div>
+                            <span className={`tracking-status-pill status-${expedition.statut.toLowerCase()}`}>
+                {expedition.statut.replace("_", " ")}
+              </span>
+                        </div>
 
-                    <StatusTimeline statut={expedition.statut} />
+                        <StatusTimeline statut={expedition.statut} />
 
-                    <table style={{ marginTop: "24px" }}>
-                        <tbody>
-                        <tr>
-                            <td><strong>Code tracking</strong></td>
-                            <td>{expedition.codeTracking}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Type</strong></td>
-                            <td>{expedition.typeEnvoi}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Ville de départ</strong></td>
-                            <td>{expedition.villeDepart?.nomVille}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Ville de destination</strong></td>
-                            <td>{expedition.villeDestination?.nomVille}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Poids déclaré</strong></td>
-                            <td>{expedition.poids} kg</td>
-                        </tr>
-                        {expedition.poidsReel && (
-                            <tr>
-                                <td><strong>Poids réel</strong></td>
-                                <td>{expedition.poidsReel} kg</td>
-                            </tr>
-                        )}
-                        <tr>
-                            <td><strong>Montant</strong></td>
-                            <td>{expedition.montant} DH</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Destinataire</strong></td>
-                            <td>{expedition.nomDestinataire} — {expedition.telephoneDestinataire}</td>
-                        </tr>
-                        {expedition.facteurAssigne && (
-                            <tr>
-                                <td><strong>Facteur assigné</strong></td>
-                                <td>{expedition.facteurAssigne.nom} {expedition.facteurAssigne.prenom}</td>
-                            </tr>
-                        )}
-                        </tbody>
-                    </table>
+                        <div className="tracking-route">
+                            <div className="tracking-route-point">
+                                <span className="tracking-dot-icon">●</span>
+                                <div>
+                                    <span className="tracking-route-label">Départ</span>
+                                    <strong>{expedition.villeDepart?.nomVille}</strong>
+                                </div>
+                            </div>
+                            <div className="tracking-route-line" />
+                            <div className="tracking-route-point">
+                                <span className="tracking-dot-icon">📍</span>
+                                <div>
+                                    <span className="tracking-route-label">Destination</span>
+                                    <strong>{expedition.villeDestination?.nomVille}</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="tracking-details-grid">
+                            <div className="tracking-detail-item">
+                                <span>Type d'envoi</span>
+                                <strong>{expedition.typeEnvoi === "COLIS" ? "📦 Colis" : "✉️ Courrier"}</strong>
+                            </div>
+                            <div className="tracking-detail-item">
+                                <span>Poids déclaré</span>
+                                <strong>{expedition.poids} kg</strong>
+                            </div>
+                            {expedition.poidsReel && expedition.poidsReel !== expedition.poids && (
+                                <div className="tracking-detail-item">
+                                    <span>Poids réel constaté</span>
+                                    <strong>{expedition.poidsReel} kg</strong>
+                                </div>
+                            )}
+                            <div className="tracking-detail-item">
+                                <span>Montant</span>
+                                <strong>{expedition.montant} DH</strong>
+                            </div>
+                            <div className="tracking-detail-item">
+                                <span>Destinataire</span>
+                                <strong>{expedition.nomDestinataire}</strong>
+                            </div>
+                            <div className="tracking-detail-item">
+                                <span>Téléphone</span>
+                                <strong>{expedition.telephoneDestinataire}</strong>
+                            </div>
+                            <div className="tracking-detail-item">
+                                <span>Date de création</span>
+                                <strong>{formatDate(expedition.dateCreation)}</strong>
+                            </div>
+                            {expedition.dateAnnulation && (
+                                <div className="tracking-detail-item">
+                                    <span>Date d'annulation</span>
+                                    <strong>{formatDate(expedition.dateAnnulation)}</strong>
+                                </div>
+                            )}
+                            {expedition.facteurAssigne && (
+                                <div className="tracking-detail-item">
+                                    <span>Facteur assigné</span>
+                                    <strong>{expedition.facteurAssigne.nom} {expedition.facteurAssigne.prenom}</strong>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {!searched && !expedition && !error && (
+                <div className="tracking-placeholder">
+                    <span>📦</span>
+                    <p>Entrez un code de suivi pour voir les détails de votre expédition</p>
                 </div>
             )}
         </div>
