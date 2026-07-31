@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface ExpeditionRepository extends JpaRepository<Expedition, Long> {
     Optional<Expedition> findByCodeTracking(String codeTracking);
     List<Expedition> findByStatut(StatutExpedition statut);
+    List<Expedition> findByStatutIn(List<StatutExpedition> statuts);
 }

@@ -75,7 +75,7 @@ public class ExpeditionService {
     }
 
     public List<Expedition> listerExpeditionsACollecter() {
-        return repository.findByStatut(StatutExpedition.VALIDEE);
+        return repository.findByStatutIn(List.of(StatutExpedition.EN_ATTENTE, StatutExpedition.VALIDEE));
     }
 
     public List<Ville> listerVilles() {

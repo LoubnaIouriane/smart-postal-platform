@@ -26,6 +26,14 @@ export default function FacteurCollectePage() {
         setPoidsSaisis({ ...poidsSaisis, [id]: value });
     };
 
+    const statutBadgeClass = (statut) => {
+        switch (statut) {
+            case "EN_ATTENTE": return "badge badge-attente";
+            case "VALIDEE": return "badge badge-validee";
+            default: return "badge";
+        }
+    };
+
     const handleValider = async (id) => {
         const poidsReel = parseFloat(poidsSaisis[id]);
 
@@ -42,7 +50,7 @@ export default function FacteurCollectePage() {
             await expeditionService.enregistrerPoidsReel(id, poidsReel);
             setMessageParExpedition({
                 ...messageParExpedition,
-                [id]: { type: "success", texte: "Collecte validée avec succès !" },
+                [id]: { type: "success", texte: "Expédition validée et collectée avec succès !" },
             });
             setTimeout(() => chargerListe(), 1000);
         } catch (err) {
@@ -56,23 +64,25 @@ export default function FacteurCollectePage() {
         }
     };
 
-    if (loading) return <p style={{ padding: "24px" }}>Chargement des expéditions à collecter...</p>;
+    if (loading) return <p style={{ padding: "24px" }}>Chargement des expéditions...</p>;
 
     return (
         <div style={{ padding: "24px" }}>
             <div className="expedition-list">
-                <h2>Expéditions à collecter</h2>
+                <h2>Expéditions à traiter</h2>
 
                 {expeditions.length === 0 ? (
-                    <p>Aucune expédition en attente de collecte pour le moment.</p>
+                    <p>Aucune expédition à traiter pour le moment.</p>
                 ) : (
                     <table>
                         <thead>
                         <tr>
                             <th>Code</th>
+                            <th>Statut</th>
                             <th>Type</th>
                             <th>Départ</th>
                             <th>Destination</th>
+                            <th>Destinataire</th>
                             <th>Poids déclaré</th>
                             <th>Poids réel</th>
                             <th>Action</th>
@@ -82,9 +92,11 @@ export default function FacteurCollectePage() {
                         {expeditions.map((exp) => (
                             <tr key={exp.idExpedition}>
                                 <td>{exp.codeTracking}</td>
+                                <td><span className={statutBadgeClass(exp.statut)}>{exp.statut.replace("_", " ")}</span></td>
                                 <td>{exp.typeEnvoi}</td>
                                 <td>{exp.villeDepart?.nomVille}</td>
                                 <td>{exp.villeDestination?.nomVille}</td>
+                                <td>{exp.nomDestinataire}</td>
                                 <td>{exp.poids} kg</td>
                                 <td>
                                     <input
