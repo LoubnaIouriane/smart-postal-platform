@@ -7,18 +7,17 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GrilleRemiseDTO {
+public class RemiseClientDTO {
 
-
-    private Long idGrille;
-
+    private Long idRemiseClient;
 
     private Double montantMin;
 
-
     private Double montantMax;
-
 
     private Double tauxRemise;
 
+    private Long clientId;
+
+    private Long grilleRemiseId;
 }

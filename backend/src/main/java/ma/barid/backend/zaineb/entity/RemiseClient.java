@@ -1,38 +1,37 @@
 package ma.barid.backend.zaineb.entity;
-
+import ma.barid.backend.auth.entity.Client;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Entity
-@Table(name = "grille_remise")
+@Table(name = "remise_client")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GrilleRemise {
-
+public class RemiseClient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idGrille;
+    private Long idRemiseClient;
 
 
-    @Column(nullable = false)
     private Double montantMin;
 
 
     private Double montantMax;
 
 
-    @Column(nullable = false)
     private Double tauxRemise;
 
 
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
 
-    @OneToMany(mappedBy = "grilleRemise")
-    private List<ContratClient> contrats;
 
+    @ManyToOne
+    @JoinColumn(name = "grille_id")
+    private GrilleRemise grilleRemise;
 }

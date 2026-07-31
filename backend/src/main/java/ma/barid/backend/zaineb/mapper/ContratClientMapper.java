@@ -10,59 +10,28 @@ public class ContratClientMapper {
 
     public ContratClientDTO toDTO(ContratClient contrat) {
 
-        if (contrat == null) {
-            return null;
-        }
+        ContratClientDTO dto = new ContratClientDTO();
 
-        return ContratClientDTO.builder()
+        dto.setIdContrat(contrat.getIdContrat());
+        dto.setNumeroContrat(contrat.getNumeroContrat());
+        dto.setDateDebut(contrat.getDateDebut());
+        dto.setDateFin(contrat.getDateFin());
+        dto.setStatut(contrat.getStatut());
 
-                .idContrat(contrat.getIdContrat())
-
-                .numeroContrat(contrat.getNumeroContrat())
-
-                .dateDebut(contrat.getDateDebut())
-
-                .dateFin(contrat.getDateFin())
-
-                .statut(contrat.getStatut())
-
-
-                .clientId(
-                        contrat.getClient() != null ?
-                                contrat.getClient().getIdUtilisateur()
-                                : null
-                )
-
-
-                .grilleRemiseId(
-                        contrat.getGrilleRemise() != null ?
-                                contrat.getGrilleRemise().getIdGrille()
-                                : null
-                )
-
-                .build();
+        return dto;
     }
 
 
     public ContratClient toEntity(ContratClientDTO dto) {
 
-        if (dto == null) {
-            return null;
-        }
-
         ContratClient contrat = new ContratClient();
 
-        contrat.setIdContrat(dto.getIdContrat());
-
         contrat.setNumeroContrat(dto.getNumeroContrat());
-
         contrat.setDateDebut(dto.getDateDebut());
-
         contrat.setDateFin(dto.getDateFin());
-
         contrat.setStatut(dto.getStatut());
-
 
         return contrat;
     }
+
 }

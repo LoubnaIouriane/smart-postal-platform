@@ -1,40 +1,259 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import CommercialLayout from "../../components/commercial/CommercialLayout";
-import DataTable from "../../components/commercial/DataTable";
-import { getGrilles, deleteGrille } from "../../services/commercialApi";
+import { saveGrilleRemise } from "../../services/commercialApi";
 
-const COLUMNS = [
-    { key: "nomGrille", label: "Nom" },
-    { key: "tauxRemise", label: "Taux de remise (%)" },
-];
 
 export default function GrilleRemiseList() {
-    const [data, setData] = useState([]);
-    const navigate = useNavigate();
-    const load = () => getGrilles().then(setData);
-    useEffect(() => { load(); }, []);
 
-    const handleDelete = async (row) => {
-        if (confirm(`Supprimer la grille ${row.nomGrille} ?`)) {
-            await deleteGrille(row.idGrille);
-            load();
+
+    const [remises, setRemises] = useState([
+        {
+            montantAvant: 10000,
+            montantApres: 20000,
+            tauxRemise: "",
+            couleur: "#EAF1F8"
+        },
+        {
+            montantAvant: 20000,
+            montantApres: 40000,
+            tauxRemise: "",
+            couleur: "#D2E1F0"
+        },
+        {
+            montantAvant: 40000,
+            montantApres: 60000,
+            tauxRemise: "",
+            couleur: "#7EA9D3"
+        },
+        {
+            montantAvant: 60000,
+            montantApres: null,
+            tauxRemise: "",
+            couleur: "#3D6EA5"
         }
+    ]);
+
+
+
+
+    const handleChange = (index, value) => {
+
+        const newRemises = [...remises];
+
+        newRemises[index].tauxRemise = value;
+
+        setRemises(newRemises);
+
     };
 
+
+
+
+
+    const handleSubmit = async () => {
+
+
+        try {
+
+
+            for (const remise of remises) {
+
+
+                await saveGrilleRemise({
+
+                    nomGrille:
+                        remise.montantApres
+                            ?
+                            `${remise.montantAvant}-${remise.montantApres}`
+                            :
+                            `${remise.montantAvant}+`,
+
+
+                    poids: 0,
+
+
+                    montantAvant: remise.montantAvant,
+
+
+                    montantApres: remise.montantApres,
+
+
+                    tauxRemise: Number(remise.tauxRemise),
+
+
+                    couleur: remise.couleur
+
+                });
+
+
+            }
+
+
+            alert("Les remises ont été enregistrées");
+
+
+        } catch(error) {
+
+
+            console.error(error);
+
+            alert("Erreur lors de l'enregistrement");
+
+
+        }
+
+
+    };
+
+
+
+
+
+
     return (
-        <CommercialLayout title="Grilles de remise">
-            <div style={{ marginBottom: 16, textAlign: "right" }}>
-                <button className="commercial-btn-add" onClick={() => navigate("/commercial/grilles-remise/nouveau")}>
-                    + Ajouter une grille
-                </button>
+
+        <CommercialLayout
+            title="Grille de remise"
+            description="Affectation des taux de remise selon le chiffre d'affaires"
+        >
+
+
+            <div className="commercial-table-wrap">
+
+
+                <table className="commercial-table">
+
+
+                    <thead>
+
+                    <tr>
+
+                        <th>
+                            Chiffre d'affaires
+                        </th>
+
+
+                        <th>
+                            Taux de remise (%)
+                        </th>
+
+
+                        <th>
+                            Couleur
+                        </th>
+
+
+                    </tr>
+
+                    </thead>
+
+
+
+                    <tbody>
+
+
+                    {remises.map((item,index)=>(
+
+
+                        <tr key={index}>
+
+
+                            <td>
+
+                                {
+                                    item.montantApres
+                                        ?
+                                        `${item.montantAvant} DH - ${item.montantApres} DH`
+                                        :
+                                        `${item.montantAvant} DH et plus`
+                                }
+
+
+                            </td>
+
+
+
+                            <td>
+
+                                <input
+
+                                    type="number"
+
+                                    min="0"
+
+                                    max="100"
+
+                                    className="commercial-form-input"
+
+                                    value={item.tauxRemise}
+
+                                    onChange={(e)=>
+                                        handleChange(index,e.target.value)
+                                    }
+
+                                    placeholder="Ex: 10"
+
+                                />
+
+                            </td>
+
+
+
+                            <td>
+
+                                <span
+
+                                    style={{
+                                        display:"inline-block",
+                                        width:"25px",
+                                        height:"25px",
+                                        borderRadius:"50%",
+                                        background:item.couleur
+                                    }}
+
+                                ></span>
+
+
+                            </td>
+
+
+
+                        </tr>
+
+
+                    ))}
+
+
+                    </tbody>
+
+
+                </table>
+
+
             </div>
-            <DataTable
-                columns={COLUMNS}
-                data={data}
-                onEdit={(row) => navigate(`/commercial/grilles-remise/${row.idGrille}`)}
-                onDelete={handleDelete}
-            />
+
+
+
+
+            <button
+
+                className="commercial-btn-add"
+
+                style={{marginTop:20}}
+
+                onClick={handleSubmit}
+
+            >
+
+                Valider remise
+
+            </button>
+
+
+
         </CommercialLayout>
+
     );
+
+
 }
