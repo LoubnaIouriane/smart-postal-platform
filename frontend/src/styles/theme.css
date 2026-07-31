@@ -1,4 +1,5 @@
 :root {
+<<<<<<< HEAD
     /* ===============================
        Orange Amana
        =============================== */
@@ -16,15 +17,28 @@
        =============================== */
 
     --blue-50: #EAF1F8;
+=======
+    /* Bleu */
+    --blue-50:  #EAF1F8;
+>>>>>>> origin/feature/facturation
     --blue-100: #D2E1F0;
     --blue-300: #7EA9D3;
     --blue-400: #3D6EA5;
     --blue-500: #14315C;
     --blue-600: #0F2646;
 
+<<<<<<< HEAD
     /* ===============================
        Gris
        =============================== */
+=======
+    /* Jaune marque */
+    --yellow-50:  #FFF8E6;
+    --yellow-200: #FFE49A;
+    --yellow-400: #FFC72C;
+    --yellow-500: #E0A800;
+    --yellow-600: #B98600;
+>>>>>>> origin/feature/facturation
 
     --gray-50: #F8F9FA;
     --gray-100: #EEEEEE;
@@ -33,19 +47,32 @@
     --gray-500: #666666;
     --gray-900: #222222;
 
+<<<<<<< HEAD
     /* ===============================
        Couleurs principales
        =============================== */
+=======
+    /* Alias semantiques */
+    --color-primary: var(--blue-500);
+    --color-primary-hover: var(--blue-600);
+    --color-primary-light: var(--blue-400);
+    --color-accent: #E0A63A;
+>>>>>>> origin/feature/facturation
 
     --color-primary: var(--orange-500);
     --color-primary-hover: var(--orange-600);
     --color-primary-light: var(--orange-400);
 
+<<<<<<< HEAD
     --color-brand: var(--orange-500);
     --color-brand-hover: var(--orange-600);
 
     --color-bg: #FFFFFF;
     --color-background: #FFFFFF;
+=======
+    --color-bg: var(--gray-50);
+    --color-background: var(--gray-50);
+>>>>>>> origin/feature/facturation
     --color-surface: #FFFFFF;
     --color-border: var(--gray-200);
 
@@ -53,6 +80,7 @@
     --color-text-muted: var(--gray-500);
     --color-text-secondary: var(--gray-500);
 
+<<<<<<< HEAD
     /* ===============================
        Status
        =============================== */
@@ -68,13 +96,32 @@
     /* ===============================
        Fonts
        =============================== */
+=======
+    --color-success: #2F9E63;
+    --color-danger: #D9534F;
+    --color-status-pending: var(--yellow-400);
+    --color-status-success: var(--color-success);
+    --color-status-danger: var(--color-danger);
+    --color-status-info: var(--blue-400);
+>>>>>>> origin/feature/facturation
 
     --font-display: "Poppins", sans-serif;
     --font-body: "Inter", sans-serif;
 
+<<<<<<< HEAD
     /* ===============================
        Espacements
        =============================== */
+=======
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 40px;
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+>>>>>>> origin/feature/facturation
 
     --space-xs: 4px;
     --space-sm: 8px;
@@ -102,4 +149,14 @@ body {
     background: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-body);
+<<<<<<< HEAD
 }
+=======
+}
+
+h1, h2, h3 {
+    font-family: var(--font-display);
+    color: var(--color-primary);
+    margin: 0;
+}
+>>>>>>> origin/feature/facturation
