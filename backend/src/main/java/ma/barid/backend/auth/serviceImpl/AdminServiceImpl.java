@@ -1,15 +1,39 @@
-// auth/serviceImpl/AdminServiceImpl.java
 package ma.barid.backend.auth.serviceImpl;
 
+
 import ma.barid.backend.auth.dto.*;
-import ma.barid.backend.auth.entity.*;
+
+import ma.barid.backend.auth.entity.Agence;
+import ma.barid.backend.auth.entity.Facteur;
+import ma.barid.backend.auth.entity.Role;
+import ma.barid.backend.auth.entity.Utilisateur;
+import ma.barid.backend.auth.entity.Ville;
+
+
 import ma.barid.backend.auth.enums.RoleName;
-import ma.barid.backend.auth.repository.*;
+
+
+import ma.barid.backend.auth.repository.AgenceRepository;
+import ma.barid.backend.auth.repository.ClientRepository;
+import ma.barid.backend.auth.repository.FacteurRepository;
+import ma.barid.backend.auth.repository.RoleRepository;
+import ma.barid.backend.auth.repository.UtilisateurRepository;
+import ma.barid.backend.auth.repository.VilleRepository;
+
+
+import ma.barid.backend.zaineb.entity.Commercial;
+import ma.barid.backend.zaineb.repository.CommercialRepository;
+
+
 import ma.barid.backend.auth.service.AdminService;
 import ma.barid.backend.auth.service.EmailService;
+
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -175,16 +199,33 @@ public class AdminServiceImpl implements AdminService {
         commercial.setTelephone(request.getTelephone());
         commercial.setAgence(nouvelleAgence);
 
-        Utilisateur utilisateur = commercial.getUtilisateur();
-        if (!utilisateur.getEmail().equalsIgnoreCase(request.getEmail())) {
+        if(!commercial.getEmail()
+                .equalsIgnoreCase(request.getEmail())){
+
+
+            if(utilisateurRepository.existsByEmail(request.getEmail())){
+                throw new RuntimeException(
+                        "Cet email est deja utilise");
+            }
+
+
+            commercial.setEmail(request.getEmail());
+
+        }
+
+
+        if (!commercial.getEmail()
+                .equalsIgnoreCase(request.getEmail())) {
+
             if (utilisateurRepository.existsByEmail(request.getEmail())) {
                 throw new RuntimeException("Cet email est deja utilise");
             }
-            utilisateur.setEmail(request.getEmail());
-            utilisateurRepository.save(utilisateur);
+
+            commercial.setEmail(request.getEmail());
         }
 
         commercialRepository.save(commercial);
+
         return toCommercialResponse(commercial);
     }
 
@@ -284,13 +325,30 @@ public class AdminServiceImpl implements AdminService {
                 .build();
         utilisateurRepository.save(utilisateur);
 
-        Commercial commercial = Commercial.builder()
-                .nom(nom)
-                .prenom(prenom)
-                .telephone(telephone)
-                .utilisateur(utilisateur)
-                .agence(agence)
-                .build();
+        Commercial commercial =
+                Commercial.builder()
+
+                        .nom(nom)
+                        .prenom(prenom)
+                        .telephone(telephone)
+
+                        .identifiant(identifiant)
+                        .email(email)
+
+                        .motDePasse(
+                                passwordEncoder.encode(motDePasseClair))
+
+                        .actif(true)
+
+                        .dateCreation(LocalDateTime.now())
+
+                        .role(role)
+
+                        .agence(agence)
+
+                        .build();
+
+
         commercialRepository.save(commercial);
 
         emailService.envoyerIdentifiants(email, identifiant, motDePasseClair);
@@ -354,8 +412,12 @@ public class AdminServiceImpl implements AdminService {
     }
 
     private AgenceResponse toAgenceResponse(Agence a) {
-        Optional<Commercial> commercial = commercialRepository.findByAgence_IdAgence(a.getIdAgence());
-        Optional<Facteur> facteur = facteurRepository.findByAgence_IdAgence(a.getIdAgence());
+
+        Optional<Commercial> commercial =
+                commercialRepository.findByAgence_IdAgence(a.getIdAgence());
+
+        Optional<Facteur> facteur =
+                facteurRepository.findByAgence_IdAgence(a.getIdAgence());
 
         return AgenceResponse.builder()
                 .idAgence(a.getIdAgence())
@@ -363,30 +425,71 @@ public class AdminServiceImpl implements AdminService {
                 .adresse(a.getAdresse())
                 .telephone(a.getTelephone())
                 .email(a.getEmail())
+
                 .idVille(a.getVille().getIdVille())
                 .nomVille(a.getVille().getNomVille())
+
+                // Commercial
                 .hasCommercial(commercial.isPresent())
-                .nomCommercial(commercial.map(c -> c.getPrenom() + " " + c.getNom()).orElse(null))
-                .telephoneCommercial(commercial.map(Commercial::getTelephone).orElse(null))
-                .emailCommercial(commercial.map(c -> c.getUtilisateur().getEmail()).orElse(null))
+                .nomCommercial(
+                        commercial.map(c -> c.getPrenom() + " " + c.getNom())
+                                .orElse(null)
+                )
+                .telephoneCommercial(
+                        commercial.map(Commercial::getTelephone)
+                                .orElse(null)
+                )
+                .emailCommercial(
+                        commercial.map(Commercial::getEmail)
+                                .orElse(null)
+                )
+
+                // Facteur
                 .hasFacteur(facteur.isPresent())
-                .nomFacteur(facteur.map(f -> f.getPrenom() + " " + f.getNom()).orElse(null))
-                .telephoneFacteur(facteur.map(Facteur::getTelephone).orElse(null))
-                .emailFacteur(facteur.map(f -> f.getUtilisateur().getEmail()).orElse(null))
+                .nomFacteur(
+                        facteur.map(f -> f.getPrenom() + " " + f.getNom())
+                                .orElse(null)
+                )
+                .telephoneFacteur(
+                        facteur.map(Facteur::getTelephone)
+                                .orElse(null)
+                )
+                .emailCommercial(
+                        commercial.map(c -> c.getEmail())
+                                .orElse(null)
+                )
+
                 .build();
     }
 
-    private CommercialResponse toCommercialResponse(Commercial c) {
+    private CommercialResponse toCommercialResponse(
+            Commercial c){
+
+
         return CommercialResponse.builder()
-                .idCommercial(c.getIdCommercial())
+
+                .idCommercial(c.getIdUtilisateur())
+
                 .nom(c.getNom())
+
                 .prenom(c.getPrenom())
-                .identifiant(c.getUtilisateur().getIdentifiant())
-                .email(c.getUtilisateur().getEmail())
+
+                .identifiant(c.getIdentifiant())
+
+                .email(c.getEmail())
+
                 .telephone(c.getTelephone())
-                .idAgence(c.getAgence().getIdAgence())
-                .nomAgence(c.getAgence().getNomAgence())
-                .actif(c.getUtilisateur().getActif())
+
+                .idAgence(
+                        c.getAgence()
+                                .getIdAgence())
+
+                .nomAgence(
+                        c.getAgence()
+                                .getNomAgence())
+
+                .actif(c.getActif())
+
                 .build();
     }
 
