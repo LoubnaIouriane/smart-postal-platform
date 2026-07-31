@@ -11,7 +11,6 @@ import ma.barid.backend.zaineb.service.GrilleRemiseService;
 
 import org.springframework.stereotype.Service;
 
-
 import java.util.List;
 
 
@@ -28,9 +27,9 @@ public class GrilleRemiseServiceImpl implements GrilleRemiseService {
 
 
 
-
     @Override
     public List<GrilleRemiseDTO> getAll(){
+
 
         return repository.findAll()
                 .stream()
@@ -42,9 +41,9 @@ public class GrilleRemiseServiceImpl implements GrilleRemiseService {
 
 
 
-
     @Override
     public GrilleRemiseDTO getById(Long id){
+
 
         GrilleRemise grille = repository.findById(id)
                 .orElseThrow(
@@ -63,6 +62,7 @@ public class GrilleRemiseServiceImpl implements GrilleRemiseService {
     @Override
     public GrilleRemiseDTO save(GrilleRemiseDTO dto){
 
+
         GrilleRemise grille = mapper.toEntity(dto);
 
 
@@ -73,12 +73,13 @@ public class GrilleRemiseServiceImpl implements GrilleRemiseService {
 
 
 
-
     @Override
     public void delete(Long id){
+
 
         repository.deleteById(id);
 
     }
+
 
 }
