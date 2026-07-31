@@ -1,67 +1,139 @@
+/* =====================================================
+SMART POSTAL - COMMERCIAL THEME AMANA
+===================================================== */
+
+
+/* ================= VARIABLES ================= */
+
 .commercial-layout {
 
+    --c-orange: #F58220;
+    --c-orange-dark: #D96B00;
+
     --c-blue: #0057B8;
-    --c-blue-dark: #00408A;
-    --c-yellow: #FFD200;
-    --c-yellow-dark: #E0B800;
+    --c-blue-dark: #003B7A;
+
     --c-white: #FFFFFF;
-    --c-gray-light: #F5F6F8;
-    --c-gray-border: #E3E6EA;
-    --c-text: #333333;
-    --c-text-muted: #7A7A7A;
-    --c-success: #2F9E63;
+
+    --c-bg: #F7F7F7;
+
+    --c-gray-light: #FAFAFA;
+    --c-gray-border: #E5E5E5;
+
+    --c-text: #222222;
+    --c-text-muted: #666666;
+
+    --c-success: #2E8B57;
     --c-danger: #D9534F;
-    --c-radius: 15px;
-    --c-shadow: 0 4px 14px rgba(0, 87, 184, 0.08);
 
-    display: flex;
-    min-height: 100vh;
-    background: var(--c-gray-light);
-    color: var(--c-text);
-    font-family: "Inter", "Segoe UI", sans-serif;
+    --c-radius:14px;
 
+    --c-shadow:
+            0 4px 16px rgba(0,0,0,0.08);
+}
+
+
+/* ================= GENERAL LAYOUT ================= */
+
+.commercial-layout {
+
+    min-height:100vh;
+
+    background:var(--c-bg);
+
+    display:flex;
+
+    font-family:
+            "Segoe UI",
+            Arial,
+            sans-serif;
 }
 
 
 
-/* ---------- Sidebar ---------- */
-
+/* ================= SIDEBAR ================= */
 
 .commercial-sidebar {
 
-    width:250px;
-    background:var(--c-blue);
-    color:#fff;
-    display:flex;
-    flex-direction:column;
-    padding:24px 0;
+    width:260px;
+
+    height:100vh;
+
     position:fixed;
-    top:0;
+
     left:0;
-    bottom:0;
 
-}
+    top:0;
 
+    background:
+            linear-gradient(
+                    180deg,
+                    #F58220,
+                    #D96B00
+            );
 
+    color:white;
 
-.commercial-sidebar-logo {
+    padding:25px 15px;
 
     display:flex;
-    align-items:center;
-    gap:10px;
-    padding:0 22px 24px;
-    border-bottom:1px solid rgba(255,255,255,0.15);
-    margin-bottom:12px;
 
+    flex-direction:column;
+
+    box-shadow:
+            4px 0 15px rgba(0,0,0,.08);
 }
 
 
 
-.commercial-sidebar-logo span {
+/* LOGO */
 
-    font-weight:700;
-    font-size:15px;
+.commercial-logo {
 
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:10px;
+
+    margin-bottom:35px;
+}
+
+
+.logo-icon {
+
+    font-size:30px;
+}
+
+
+.commercial-logo strong {
+
+    display:block;
+
+    font-size:20px;
+}
+
+
+.commercial-logo small {
+
+    opacity:.85;
+
+    font-size:13px;
+}
+
+
+
+/* MENU */
+
+.commercial-menu {
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
 }
 
 
@@ -69,68 +141,82 @@
 .commercial-nav-item {
 
     display:flex;
-    align-items:center;
-    gap:12px;
-    padding:12px 22px;
-    color:rgba(255,255,255,0.85);
-    text-decoration:none;
-    font-size:14px;
-    font-weight:500;
-    border-left:3px solid transparent;
-    transition:background 0.15s ease,border-color 0.15s ease;
 
+    align-items:center;
+
+    gap:15px;
+
+    padding:14px 15px;
+
+    border-radius:12px;
+
+    color:white;
+
+    text-decoration:none;
+
+    transition:.3s;
+
+    font-size:15px;
 }
 
 
 
 .commercial-nav-item:hover {
 
-    background:rgba(255,255,255,0.08);
-
+    background:
+            rgba(255,255,255,.18);
 }
 
 
 
 .commercial-nav-item.active {
 
-    border-left-color:var(--c-yellow);
-    background:rgba(255,255,255,0.1);
-    color:#fff;
+    background:white;
 
+    color:#F58220;
+
+    font-weight:600;
 }
 
 
 
+.menu-icon {
+
+    font-size:22px;
+}
 
 
-/* ---------- Zone principale ---------- */
 
+/* ================= MAIN ================= */
 
 .commercial-main {
 
-    margin-left:250px;
-    flex:1;
-    display:flex;
-    flex-direction:column;
+    margin-left:260px;
 
+    width:
+            calc(100% - 260px);
 }
 
 
 
-
-
-/* ---------- Header ---------- */
-
+/* ================= HEADER ================= */
 
 .commercial-header {
 
-    background:#fff;
-    box-shadow:0 2px 8px rgba(0,0,0,0.05);
-    padding:18px 32px;
+    height:75px;
+
+    background:white;
+
+    border-bottom:
+            1px solid var(--c-gray-border);
+
     display:flex;
-    align-items:center;
+
     justify-content:space-between;
 
+    align-items:center;
+
+    padding:0 30px;
 }
 
 
@@ -138,158 +224,126 @@
 .commercial-header h1 {
 
     margin:0;
-    font-size:19px;
-    color:var(--c-text);
 
+    font-size:24px;
+
+    color:#F58220;
 }
 
 
 
 .commercial-header p {
 
-    margin:2px 0 0;
-    font-size:13px;
+    margin:5px 0 0;
+
     color:var(--c-text-muted);
-
 }
 
 
 
-.commercial-header-right {
-
-    display:flex;
-    align-items:center;
-    gap:18px;
-
-}
-
-
-
-.commercial-search {
-
-    padding:8px 14px;
-    border-radius:20px;
-    border:1px solid var(--c-gray-border);
-    font-size:13px;
-    width:220px;
-    background:var(--c-gray-light);
-
-}
-
-
-
-.commercial-avatar {
-
-    width:36px;
-    height:36px;
-    border-radius:50%;
-    background:var(--c-blue);
-    color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:700;
-    font-size:14px;
-
-}
-
-
-
-
-
-/* ---------- Contenu ---------- */
-
+/* ================= CONTENT ================= */
 
 .commercial-content {
 
-    padding:28px 32px;
-
+    padding:30px;
 }
 
 
 
-
-
-/* ---------- Cartes statistiques ---------- */
-
+/* ================= CARDS ================= */
 
 .commercial-stat-grid {
 
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:25px;
+}
+
+
+
+.stat-card {
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:var(--c-radius);
+
+    display:flex;
+
+    align-items:center;
+
     gap:20px;
-    margin-bottom:28px;
 
-}
-
-
-
-.commercial-stat-card {
-
-    background:#fff;
-    border-radius:var(--c-radius);
     box-shadow:var(--c-shadow);
-    padding:20px;
-    display:flex;
-    align-items:center;
-    gap:16px;
-    transition:transform 0.15s ease;
 
+    transition:.3s;
 }
 
 
 
-.commercial-stat-card:hover {
+.stat-card:hover {
 
-    transform:translateY(-3px);
-
+    transform:translateY(-4px);
 }
 
 
 
-.commercial-stat-icon {
+.stat-icon {
 
-    width:48px;
-    height:48px;
-    border-radius:50%;
+    width:60px;
+
+    height:60px;
+
+    border-radius:15px;
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
-    font-size:20px;
-    color:#fff;
-    flex-shrink:0;
 
+    font-size:30px;
+
+    background:#FFF1E6;
+
+    color:#F58220;
 }
 
 
 
-.commercial-stat-value {
+.stat-value {
 
-    font-size:22px;
+    font-size:32px;
+
     font-weight:700;
-    margin:0;
 
+    color:#0057B8;
 }
 
 
 
-.commercial-stat-label {
+.stat-label {
 
-    font-size:13px;
     color:var(--c-text-muted);
-    margin:2px 0 0;
-
 }
-/* ---------- Tableaux ---------- */
 
 
-.commercial-table-wrap {
 
-    background:#fff;
+/* ================= TABLE ================= */
+
+.commercial-table-container {
+
+    background:white;
+
+    padding:25px;
+
     border-radius:var(--c-radius);
-    box-shadow:var(--c-shadow);
-    overflow:hidden;
 
+    box-shadow:var(--c-shadow);
 }
 
 
@@ -297,397 +351,203 @@
 .commercial-table {
 
     width:100%;
-    border-collapse:collapse;
 
+    border-collapse:collapse;
 }
 
 
 
 .commercial-table th {
 
-    background:var(--c-blue);
-    color:#fff;
-    text-align:left;
-    padding:12px 16px;
-    font-size:13px;
-    font-weight:600;
+    background:#FFF1E6;
 
+    padding:15px;
+
+    text-align:left;
+
+    color:#D96B00;
 }
 
 
 
 .commercial-table td {
 
-    padding:12px 16px;
-    font-size:13.5px;
-    border-bottom:1px solid var(--c-gray-light);
+    padding:14px;
 
+    border-bottom:
+            1px solid #eee;
 }
 
 
 
-.commercial-table tr:hover td {
+.commercial-table tr:hover {
 
-    background:var(--c-gray-light);
-
+    background:#FFF8F2;
 }
 
 
 
+/* ================= BUTTONS ================= */
 
-/* ---------- Boutons ---------- */
+.btn-primary {
 
+    background:#F58220;
 
-.commercial-btn-icon {
+    color:white;
 
     border:none;
-    border-radius:8px;
-    padding:6px 12px;
-    font-size:12.5px;
-    font-weight:600;
-    cursor:pointer;
-    margin-right:6px;
 
-}
-
-
-
-.commercial-btn-edit {
-
-    background:#E9F2FF;
-    color:var(--c-blue);
-
-}
-
-
-
-.commercial-btn-delete {
-
-    background:#FDEBEA;
-    color:var(--c-danger);
-
-}
-
-
-
-.commercial-btn-add {
-
-    background:var(--c-yellow);
-    color:var(--c-blue-dark);
-    border:none;
-    border-radius:10px;
     padding:10px 18px;
-    font-weight:700;
-    font-size:14px;
-    cursor:pointer;
-    transition:filter 0.15s ease;
 
-}
-
-
-
-.commercial-btn-add:hover {
-
-    filter:brightness(0.95);
-
-}
-
-
-
-
-
-/* ---------- Formulaires ---------- */
-
-
-.commercial-form-field {
-
-    margin-bottom:16px;
-
-}
-
-
-
-.commercial-form-label {
-
-    display:block;
-    font-size:13px;
-    color:var(--c-text-muted);
-    margin-bottom:6px;
-    font-weight:600;
-
-}
-
-
-
-.commercial-form-input {
-
-    width:100%;
-    padding:10px 14px;
-    border:1px solid var(--c-gray-border);
     border-radius:10px;
-    font-size:14px;
-    background:#fff;
 
-}
-
-
-
-.commercial-form-input:focus {
-
-    outline:none;
-    border-color:var(--c-blue);
-    box-shadow:0 0 0 3px #E9F2FF;
-
-}
-
-
-
-.commercial-form-submit {
-
-    background:var(--c-yellow);
-    color:var(--c-blue-dark);
-    border:none;
-    border-radius:10px;
-    padding:12px 20px;
-    font-weight:700;
-    font-size:14.5px;
     cursor:pointer;
-    width:100%;
-
 }
 
 
 
+.btn-primary:hover {
 
-
-/* ---------- Badges contrat ---------- */
-
-
-.commercial-badge {
-
-    padding:4px 12px;
-    border-radius:999px;
-    font-size:12px;
-    font-weight:700;
-    color:#fff;
-
+    background:#D96B00;
 }
 
 
 
-.commercial-badge-actif {
+.btn-warning {
 
-    background:var(--c-success);
+    background:#FFD200;
 
+    color:#003B7A;
 }
 
 
 
-.commercial-badge-expire {
-
-    background:var(--c-danger);
-
-}
-
-
-
-.commercial-badge-attente {
-
-    background:var(--c-yellow);
-    color:var(--c-blue-dark);
-
-}
-
-
-
-
-
-/* ==================================================
-              GRILLE REMISE
-================================================== */
-
-
-
-.grille-remise-table {
-
-    width:100%;
-    border-collapse:collapse;
-    margin-top:20px;
-    background:#fff;
-    border-radius:var(--c-radius);
-    overflow:hidden;
-    box-shadow:var(--c-shadow);
-
-}
-
-
-
-.grille-remise-table th {
-
-    background:var(--c-blue);
-    color:#fff;
-    padding:12px 16px;
-    text-align:center;
-    font-size:13px;
-    font-weight:600;
-
-}
-
-
-
-.grille-remise-table td {
-
-    padding:12px 16px;
-    text-align:center;
-    font-size:13.5px;
-    border-bottom:1px solid var(--c-gray-light);
-
-}
-
-
-
-.grille-remise-table tr:hover td {
-
-    background:var(--c-gray-light);
-
-}
-
-
-
-
-/* ---------- Pastille couleur remise ---------- */
-
-
-.grille-remise-color {
-
-    width:22px;
-    height:22px;
-    border-radius:50%;
-    display:inline-block;
-    border:2px solid var(--c-gray-border);
-
-}
-
-
-
-
-
-/* ---------- Clé des couleurs ---------- */
-
-
-.grille-remise-key {
-
-    margin-top:30px;
-    background:#fff;
-    padding:20px;
-    border-radius:var(--c-radius);
-    box-shadow:var(--c-shadow);
-
-}
-
-
-
-.grille-remise-key h3 {
-
-    color:var(--c-blue);
-    margin-bottom:15px;
-
-}
-
-
-
-.grille-remise-key table {
-
-    width:100%;
-    border-collapse:collapse;
-
-}
-
-
-
-.grille-remise-key th {
-
-    background:var(--c-blue);
-    color:#fff;
-    padding:10px;
-    font-size:13px;
-
-}
-
-
-
-.grille-remise-key td {
-
-    padding:10px;
-    text-align:center;
-    border-bottom:1px solid var(--c-gray-light);
-
-}
-
-
-
-
-
-/* ---------- Couleurs de la clé ---------- */
-
-
-.key-green {
-
-    background:#2F9E63;
-
-}
-
-
-
-.key-orange {
-
-    background:#E0A800;
-
-}
-
-
-
-.key-red {
+.btn-danger {
 
     background:#D9534F;
 
+    color:white;
 }
 
 
 
+/* ================= BADGES ================= */
+
+.badge {
+
+    padding:6px 12px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+    font-weight:600;
+}
 
 
-/* ---------- Responsive ---------- */
+
+.badge-success {
+
+    background:#DFF5E8;
+
+    color:#2E8B57;
+}
 
 
-@media (max-width:900px) {
+
+.badge-danger {
+
+    background:#FBE0E0;
+
+    color:#D9534F;
+}
+
+
+
+.badge-warning {
+
+    background:#FFF4B8;
+
+    color:#8A6D00;
+}
+
+
+
+/* ================= FORMS ================= */
+
+.commercial-form {
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:var(--c-radius);
+
+    box-shadow:var(--c-shadow);
+}
+
+
+
+.form-group {
+
+    margin-bottom:20px;
+}
+
+
+
+.form-group label {
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-weight:600;
+}
+
+
+
+.form-group input,
+.form-group select {
+
+    width:100%;
+
+    padding:12px;
+
+    border:
+
+            1px solid #ddd;
+
+    border-radius:10px;
+}
+
+
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px){
 
     .commercial-sidebar {
 
-        width:70px;
-
-    }
-
-
-    .commercial-sidebar-logo span,
-    .commercial-nav-item span.label {
-
-        display:none;
+        width:80px;
 
     }
 
 
     .commercial-main {
 
-        margin-left:70px;
+        margin-left:80px;
+
+        width:
+                calc(100% - 80px);
 
     }
 
-}
 
+    .label {
 
+        display:none;
 
-@media (max-width:600px) {
+    }
 
 
     .commercial-stat-grid {
@@ -695,13 +555,5 @@
         grid-template-columns:1fr;
 
     }
-
-
-    .commercial-search {
-
-        display:none;
-
-    }
-
 
 }

@@ -1,37 +1,30 @@
 :root {
-    /* Bleu */
-    --blue-50: #EAF1F8;
-    --blue-100: #D2E1F0;
-    --blue-300: #7EA9D3;
-    --blue-400: #3D6EA5;
-    --blue-500: #0B3D6B;
-    --blue-600: #092F54;
+    /* Orange Amana */
+    --orange-50: #FFF4E8;
+    --orange-100: #FFE4C2;
+    --orange-300: #FFB45C;
+    --orange-400: #F7931E;
+    --orange-500: #F58220;
+    --orange-600: #D96A00;
 
-    /* Jaune (marque) */
-    --yellow-50: #FFF8E6;
-    --yellow-200: #FFE49A;
-    --yellow-400: #FFC72C;
-    --yellow-500: #E0A800;
-    --yellow-600: #B98600;
-
-    /* Gris */
-    --gray-50: #F4F5F7;
-    --gray-100: #EAEDF1;
-    --gray-200: #DDE2E8;
-    --gray-300: #C3CBD3;
-    --gray-500: #5C6773;
-    --gray-900: #1B2430;
+    /* Blanc / Gris */
+    --gray-50: #F8F9FA;
+    --gray-100: #EEEEEE;
+    --gray-200: #DDDDDD;
+    --gray-300: #CCCCCC;
+    --gray-500: #666666;
+    --gray-900: #222222;
 
     /* Couleurs principales */
-    --color-primary: var(--blue-500);
-    --color-primary-hover: var(--blue-600);
-    --color-primary-light: var(--blue-400);
+    --color-primary: var(--orange-500);
+    --color-primary-hover: var(--orange-600);
+    --color-primary-light: var(--orange-400);
 
-    --color-brand: var(--yellow-400);
-    --color-brand-hover: var(--yellow-500);
+    --color-brand: var(--orange-500);
+    --color-brand-hover: var(--orange-600);
 
-    --color-bg: var(--gray-50);
-    --color-background: var(--gray-50);
+    --color-bg: #FFFFFF;
+    --color-background: #FFFFFF;
 
     --color-surface: #FFFFFF;
     --color-border: var(--gray-200);
@@ -41,12 +34,12 @@
     --color-text-secondary: var(--gray-500);
 
     /* Status */
-    --color-status-pending: var(--yellow-400);
-    --color-status-success: #2F9E63;
+    --color-status-pending: #F5A623;
+    --color-status-success: #2E8B57;
     --color-status-danger: #D9534F;
-    --color-status-info: var(--blue-400);
+    --color-status-info: var(--orange-400);
 
-    --color-success: #2F9E63;
+    --color-success: #2E8B57;
     --color-danger: #D9534F;
 
     /* Fonts */
@@ -64,8 +57,8 @@
     --radius-sm: 8px;
     --radius-md: 14px;
 
-    /* Shadows */
-    --shadow-card: 0 4px 16px rgba(11, 61, 107, 0.08);
+    /* Ombres */
+    --shadow-card: 0 4px 16px rgba(245, 130, 32, 0.15);
     --shadow-nav: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 

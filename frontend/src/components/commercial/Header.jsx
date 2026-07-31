@@ -1,24 +1,40 @@
-import { useAuth } from "../../context/AuthContext"; // import du contexte d'Etudiant 1
+import { useAuth } from "../../context/AuthContext";
 
 export default function Header({ title, description }) {
+
     const { role } = useAuth();
 
     return (
         <header className="commercial-header">
-            <div>
+
+            <div className="header-title">
                 <h1>{title}</h1>
-                {description && <p>{description}</p>}
+                <p>{description}</p>
             </div>
 
-            <div className="commercial-header-right">
-                <input className="commercial-search" placeholder="Rechercher..." />
-                <span style={{ fontSize: 18 }}>🔔</span>
-                <div className="commercial-avatar">{role ? role[0] : "?"}</div>
-                <div style={{ fontSize: 13 }}>
-                    <div style={{ fontWeight: 600 }}>Commercial</div>
-                    <div style={{ color: "var(--c-text-muted)" }}>{role}</div>
+
+            <div className="header-actions">
+
+                <div className="notification-icon">
+                    🔔
                 </div>
+
+
+                <div className="commercial-profile">
+
+                    <div className="profile-avatar">
+                        👤
+                    </div>
+
+                    <div className="profile-info">
+                        <span>Commercial</span>
+                        <small>{role}</small>
+                    </div>
+
+                </div>
+
             </div>
+
         </header>
     );
 }
