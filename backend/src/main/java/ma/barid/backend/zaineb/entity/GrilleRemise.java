@@ -14,17 +14,25 @@ import java.util.List;
 @Builder
 public class GrilleRemise {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idGrille;
 
+
     @Column(nullable = false)
-    private String nomGrille;
+    private Double montantMin;
+
+
+    private Double montantMax;
+
 
     @Column(nullable = false)
     private Double tauxRemise;
 
 
+
     @OneToMany(mappedBy = "grilleRemise")
     private List<ContratClient> contrats;
+
 }

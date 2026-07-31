@@ -10,25 +10,65 @@ import java.util.List;
 @RestController
 @RequestMapping("/commercial/contrats")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class ContratClientController {
 
     private final ContratClientService contratClientService;
 
+
+    // Liste des contrats
     @GetMapping
-    public List getAll() { return contratClientService.getAll(); }
+    public List<ContratClientDTO> getAll() {
 
-    @GetMapping("/{id}")
-    public ContratClientDTO getById(@PathVariable Long id) { return contratClientService.getById(id); }
+        return contratClientService.getAll();
 
-    @PostMapping
-    public ContratClientDTO create(@RequestBody ContratClientDTO dto) { return contratClientService.save(dto); }
-
-    @PutMapping("/{id}")
-    public ContratClientDTO update(@PathVariable Long id, @RequestBody ContratClientDTO dto) {
-        dto.setIdContrat(id);
-        return contratClientService.save(dto);
     }
 
+
+    // Détails d'un contrat
+    @GetMapping("/{id}")
+    public ContratClientDTO getById(
+            @PathVariable Long id
+    ) {
+
+        return contratClientService.getById(id);
+
+    }
+
+
+    // Ajouter un contrat
+    @PostMapping
+    public ContratClientDTO create(
+            @RequestBody ContratClientDTO dto
+    ) {
+
+        return contratClientService.save(dto);
+
+    }
+
+
+    // Modifier un contrat
+    @PutMapping("/{id}")
+    public ContratClientDTO update(
+            @PathVariable Long id,
+            @RequestBody ContratClientDTO dto
+    ) {
+
+        dto.setIdContrat(id);
+
+        return contratClientService.save(dto);
+
+    }
+
+
+    // Supprimer un contrat
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) { contratClientService.delete(id); }
+    public void delete(
+            @PathVariable Long id
+    ) {
+
+        contratClientService.delete(id);
+
+    }
+
 }
