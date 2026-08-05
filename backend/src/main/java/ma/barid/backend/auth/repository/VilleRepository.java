@@ -1,5 +1,5 @@
-// auth/repository/VilleRepository.java
-package ma.barid.backend.auth.repository;
+ // auth/repository/VilleRepository.java
+        package ma.barid.backend.auth.repository;
 
 import ma.barid.backend.auth.entity.Ville;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,0 +1,206 @@
+.tracking-page {
+    min-height: 100vh;
+    background: var(--amana-gray, #F5F6F8);
+    padding-bottom: 60px;
+}
+
+.tracking-hero {
+    background: linear-gradient(135deg, var(--amana-blue, #1B3F76), #0d2547);
+    color: white;
+    padding: 48px 24px;
+    text-align: center;
+}
+
+.tracking-hero h1 {
+    margin: 0 0 8px;
+    font-size: 32px;
+}
+
+.tracking-hero p {
+    margin: 0 0 24px;
+    opacity: 0.85;
+    font-size: 15px;
+}
+
+.tracking-search {
+    display: flex;
+    max-width: 480px;
+    margin: 0 auto;
+    gap: 8px;
+}
+
+.tracking-search input {
+    flex: 1;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
+    text-transform: uppercase;
+}
+
+.tracking-search input:focus {
+    outline: 3px solid var(--amana-orange, #F4731D);
+}
+
+.tracking-search button {
+    padding: 14px 28px;
+    background: var(--amana-orange, #F4731D);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.tracking-search button:hover {
+    background: #d9631a;
+}
+
+.tracking-search button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.tracking-result {
+    max-width: 720px;
+    margin: -30px auto 0;
+    padding: 0 24px;
+}
+
+.tracking-card {
+    background: white;
+    border-radius: 14px;
+    padding: 32px;
+    box-shadow: 0 8px 24px rgba(27, 63, 118, 0.12);
+}
+
+.tracking-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.tracking-code-label {
+    font-size: 12px;
+    color: var(--amana-blue, #1B3F76);
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.tracking-card-header h2 {
+    margin: 4px 0 0;
+    color: var(--amana-blue, #1B3F76);
+    font-size: 24px;
+}
+
+.tracking-status-pill {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: capitalize;
+    height: fit-content;
+}
+
+.status-en_attente { background: #FFF3E0; color: var(--amana-orange, #F4731D); }
+.status-validee { background: #E3F2E1; color: #2E7D32; }
+.status-annulee { background: #FBE3E3; color: #C0392B; }
+.status-collectee { background: #E3EAF6; color: var(--amana-blue, #1B3F76); }
+
+.tracking-route {
+    display: flex;
+    align-items: center;
+    background: var(--amana-gray, #F5F6F8);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 24px 0;
+}
+
+.tracking-route-point {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tracking-route-label {
+    display: block;
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+}
+
+.tracking-route-line {
+    flex: 1;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, #ccc, #ccc 6px, transparent 6px, transparent 12px);
+    margin: 0 16px;
+}
+
+.tracking-details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+    border-top: 1px solid var(--amana-gray, #F5F6F8);
+    padding-top: 24px;
+}
+
+.tracking-detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.tracking-detail-item span {
+    font-size: 12px;
+    color: #888;
+}
+
+.tracking-detail-item strong {
+    color: var(--amana-blue, #1B3F76);
+    font-size: 14px;
+}
+
+.tracking-error-box {
+    background: white;
+    border-left: 4px solid #C0392B;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.tracking-error-icon {
+    font-size: 24px;
+}
+
+.tracking-error-box strong {
+    color: #C0392B;
+}
+
+.tracking-error-box p {
+    margin: 4px 0 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.tracking-placeholder {
+    max-width: 720px;
+    margin: 40px auto 0;
+    text-align: center;
+    color: #999;
+    padding: 0 24px;
+}
+
+.tracking-placeholder span {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 12px;
+}

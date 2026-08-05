@@ -44,6 +44,7 @@ public class SecurityConfig {
                         // ✅ PUBLIC ROUTES
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                        .requestMatchers("/api/expeditions/**").permitAll() // TODO: restreindre par rôle une fois l'auth branchée
 
                         // 🔒 PRIVATE ROUTES
                         .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -64,7 +65,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOriginPatterns(List.of("http://localhost:*"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
