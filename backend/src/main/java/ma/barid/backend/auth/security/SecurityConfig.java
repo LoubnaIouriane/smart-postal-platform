@@ -47,6 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/expeditions/**").permitAll() // TODO: restreindre par rôle une fois l'auth branchée
 
                         // 🔒 PRIVATE ROUTES
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/commercial/**").hasRole("COMMERCIAL")
                         .requestMatchers("/facteur/**").hasRole("FACTEUR")
                         .requestMatchers("/client/**").hasRole("CLIENT")

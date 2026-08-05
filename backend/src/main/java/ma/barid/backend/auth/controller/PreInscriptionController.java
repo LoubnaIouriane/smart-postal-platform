@@ -25,4 +25,5 @@ public class PreInscriptionController {
         return ResponseEntity.ok(
                 "Demande de pre-inscription enregistree, en attente de validation");
     }
+
 }

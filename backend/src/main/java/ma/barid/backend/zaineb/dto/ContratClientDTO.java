@@ -1,10 +1,8 @@
 package ma.barid.backend.zaineb.dto;
 
-
 import lombok.*;
 
 import java.time.LocalDate;
-
 
 @Getter
 @Setter
@@ -13,29 +11,29 @@ import java.time.LocalDate;
 @Builder
 public class ContratClientDTO {
 
-
     private Long idContrat;
-
 
     private String numeroContrat;
 
-
     private LocalDate dateDebut;
 
-
     private LocalDate dateFin;
-
 
     private String statut;
 
 
+    // Conditions / description du contrat
+    private String conditions;
 
-    // Relation avec Client
+
+    // Client lié au contrat
     private Long clientId;
 
+    // Nom du client pour affichage frontend
+    private String clientNom;
 
 
-    // Relation avec GrilleRemise
+    // Grille de remise liée
     private Long grilleRemiseId;
 
 }

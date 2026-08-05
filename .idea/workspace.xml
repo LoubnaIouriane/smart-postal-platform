@@ -5,22 +5,38 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="523b925f-47f1-4a1f-b625-24ba3854dc55" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/auth/controller/PasswordResetController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/auth/controller/PasswordResetController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/auth/controller/UserProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/auth/controller/UserProfileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/auth/controller/ValidationCommercialController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/auth/controller/ValidationCommercialController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/auth/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/auth/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/dto/ChangePasswordRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/dto/ClientListResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/dto/ErrorResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/dto/ForgotPasswordRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/dto/ResetPasswordRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/dto/UserProfileResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/auth/controller/PreInscriptionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/auth/controller/PreInscriptionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/auth/repository/ClientRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/auth/repository/ClientRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/controller/CommercialDashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/controller/CommercialDashboardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/controller/CommercialPreInscriptionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/controller/CommercialPreInscriptionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/controller/ContratClientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/controller/ContratClientController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/controller/DashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/controller/DashboardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/controller/RemiseClientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/controller/RemiseClientController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/dto/CommercialDashboardDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/dto/CommercialDashboardDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/dto/ContratClientDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/dto/ContratClientDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/dto/DashboardDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/dto/DashboardDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/dto/GrilleRemiseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/dto/GrilleRemiseDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/dto/RemiseClientDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/dto/RemiseClientDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/entity/ContratClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/entity/ContratClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/entity/GrilleRemise.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/entity/GrilleRemise.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/entity/RemiseClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/entity/RemiseClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/mapper/ContratClientMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/mapper/ContratClientMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/mapper/GrilleRemiseMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/mapper/GrilleRemiseMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/repository/GrilleRemiseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/repository/GrilleRemiseRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/repository/RemiseClientRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/repository/RemiseClientRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/service/CommercialDashboardService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/service/CommercialDashboardService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/service/CommercialPreInscriptionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/service/CommercialPreInscriptionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/service/ContratClientService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/service/ContratClientService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/service/DashboardService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/service/DashboardService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/service/GrilleRemiseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/service/GrilleRemiseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/service/RemiseClientService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/service/RemiseClientService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/serviceImpl/CommercialDashboardServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/serviceImpl/CommercialDashboardServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/serviceImpl/CommercialPreInscriptionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/serviceImpl/CommercialPreInscriptionServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/serviceImpl/ContratClientServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/serviceImpl/ContratClientServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/test/java/ma/barid/backend/BackendApplicationTests.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/test/java/ma/barid/backend/auth/AuthServiceImplTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/serviceImpl/DashboardServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/serviceImpl/DashboardServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/serviceImpl/GrilleRemiseServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/serviceImpl/GrilleRemiseServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/serviceImpl/RemiseClientServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/ma/barid/backend/zaineb/serviceImpl/RemiseClientServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +46,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
+        <option value="JSX File" />
         <option value="Class" />
       </list>
     </option>

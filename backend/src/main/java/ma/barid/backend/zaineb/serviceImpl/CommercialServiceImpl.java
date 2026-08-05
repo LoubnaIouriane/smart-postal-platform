@@ -21,73 +21,185 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommercialServiceImpl implements CommercialService {
 
+
     private final CommercialRepository commercialRepository;
     private final CommercialMapper mapper;
 
-    // Beans IMPORTES depuis le module auth (jamais modifies, juste reutilises)
     private final RoleRepository roleRepository;
     private final AgenceRepository agenceRepository;
     private final PasswordEncoder passwordEncoder;
 
+
+
     @Override
-    public List getAll() {
-        return commercialRepository.findAll().stream().map(mapper::toDTO).toList();
+    public List<CommercialDTO> getAll() {
+
+        return commercialRepository.findAll()
+                .stream()
+                .map(mapper::toDTO)
+                .toList();
     }
+
+
 
     @Override
     public CommercialDTO getById(Long id) {
-        Commercial commercial = commercialRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Commercial introuvable"));
+
+        Commercial commercial =
+                commercialRepository.findById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Commercial introuvable"
+                                ));
+
         return mapper.toDTO(commercial);
     }
 
+
+
+
+
     @Override
-    public CommercialDTO create(CommercialCreateRequest request) {
-        if (commercialRepository.existsByIdentifiant(request.getIdentifiant())) {
-            throw new RuntimeException("Cet identifiant est deja utilise");
+    public CommercialDTO create(
+            CommercialCreateRequest request
+    ) {
+
+
+        if(commercialRepository.existsByIdentifiant(
+                request.getIdentifiant()
+        )){
+
+            throw new RuntimeException(
+                    "Cet identifiant est deja utilise"
+            );
         }
 
-        Role roleCommercial = roleRepository.findByNomRole("COMMERCIAL")
-                .orElseThrow(() -> new RuntimeException("Role COMMERCIAL introuvable"));
 
-        Agence agence = agenceRepository.findById(request.getAgenceId())
-                .orElseThrow(() -> new RuntimeException("Agence introuvable"));
 
-        Commercial commercial = Commercial.builder()
-                .identifiant(request.getIdentifiant())
-                .email(request.getEmail())
-                .motDePasse(passwordEncoder.encode(request.getMotDePasse()))
-                .actif(true)
-                .dateCreation(LocalDateTime.now())
-                .role(roleCommercial)
-                .nom(request.getNom())
-                .prenom(request.getPrenom())
-                .telephone(request.getTelephone())
-                .agence(agence)
-                .build();
+        Role roleCommercial =
+                roleRepository.findByNomRole("COMMERCIAL")
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Role COMMERCIAL introuvable"
+                                ));
 
-        return mapper.toDTO(commercialRepository.save(commercial));
+
+
+
+        Agence agence =
+                agenceRepository.findById(
+                                request.getAgenceId()
+                        )
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Agence introuvable"
+                                ));
+
+
+
+
+
+        Commercial commercial =
+                Commercial.builder()
+
+                        .nom(request.getNom())
+
+                        .prenom(request.getPrenom())
+
+                        .email(request.getEmail())
+
+                        .telephone(request.getTelephone())
+
+                        .identifiant(request.getIdentifiant())
+
+                        .motDePasse(
+                                passwordEncoder.encode(
+                                        request.getMotDePasse()
+                                )
+                        )
+
+                        .actif(true)
+
+                        .dateCreation(LocalDateTime.now())
+
+                        .role(roleCommercial)
+
+                        .agence(agence)
+
+                        .build();
+
+
+
+        return mapper.toDTO(
+                commercialRepository.save(commercial)
+        );
+
     }
+
+
+
+
+
+
 
     @Override
-    public CommercialDTO update(Long id, CommercialCreateRequest request) {
-        Commercial commercial = commercialRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Commercial introuvable"));
+    public CommercialDTO update(
+            Long id,
+            CommercialCreateRequest request
+    ) {
 
-        Agence agence = agenceRepository.findById(request.getAgenceId())
-                .orElseThrow(() -> new RuntimeException("Agence introuvable"));
+
+        Commercial commercial =
+                commercialRepository.findById(id)
+
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Commercial introuvable"
+                                ));
+
+
+
+
+        Agence agence =
+                agenceRepository.findById(
+                                request.getAgenceId()
+                        )
+
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Agence introuvable"
+                                ));
+
+
+
 
         commercial.setNom(request.getNom());
+
         commercial.setPrenom(request.getPrenom());
+
         commercial.setEmail(request.getEmail());
+
         commercial.setTelephone(request.getTelephone());
+
         commercial.setAgence(agence);
 
-        return mapper.toDTO(commercialRepository.save(commercial));
+
+
+        return mapper.toDTO(
+                commercialRepository.save(commercial)
+        );
     }
+
+
+
+
+
 
     @Override
     public void delete(Long id) {
+
         commercialRepository.deleteById(id);
+
     }
+
 }
