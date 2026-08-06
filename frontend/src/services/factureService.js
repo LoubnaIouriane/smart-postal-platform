@@ -1,11 +1,6 @@
-import {
-  createFacture,
-  genererFacturesMensuelles,
-  getFactureById,
+import {  getFactureById,
   getFactures,
-  getFacturesByClient,
-  marquerFacturePayee,
-  rechercherFactures,
+  getFacturesByClient,  rechercherFactures,
   telechargerPdf,
 } from "./factureApi";
 
@@ -13,11 +8,9 @@ const factureService = {
   getAll: getFactures,
   getById: getFactureById,
   getByClient: getFacturesByClient,
-  creer: createFacture,
-  marquerPayee: marquerFacturePayee,
-  rechercher: rechercherFactures,
-  genererMensuelles: genererFacturesMensuelles,
-  telechargerPdf,
+  creer:  marquerPayee:  rechercher: rechercherFactures,
+  genererMensuelles:  telechargerPdf,
 };
 
 export default factureService;
+

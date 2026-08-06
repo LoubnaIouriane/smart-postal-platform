@@ -23,6 +23,16 @@ public class LigneFacture {
     private Double prixUnitaire;
     private Double montantLigne;
     private Long expeditionId;
+    private String codeExpedition;
+    private String typeEnvoi;
+    private Double poidsDeclare;
+    private Double poidsReel;
+    private String destinataireNom;
+    private String destinataireTelephone;
+    private String destinataireAdresse;
+    private String motifModificationTarif;
+    private Long villeDepartId;
+    private Long villeDestinationId;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,6 +51,26 @@ public class LigneFacture {
     public void setMontantLigne(Double montantLigne) { this.montantLigne = montantLigne; }
     public Long getExpeditionId() { return expeditionId; }
     public void setExpeditionId(Long expeditionId) { this.expeditionId = expeditionId; }
+    public String getCodeExpedition() { return codeExpedition; }
+    public void setCodeExpedition(String codeExpedition) { this.codeExpedition = codeExpedition; }
+    public String getTypeEnvoi() { return typeEnvoi; }
+    public void setTypeEnvoi(String typeEnvoi) { this.typeEnvoi = typeEnvoi; }
+    public Double getPoidsDeclare() { return poidsDeclare; }
+    public void setPoidsDeclare(Double poidsDeclare) { this.poidsDeclare = poidsDeclare; }
+    public Double getPoidsReel() { return poidsReel; }
+    public void setPoidsReel(Double poidsReel) { this.poidsReel = poidsReel; }
+    public String getDestinataireNom() { return destinataireNom; }
+    public void setDestinataireNom(String destinataireNom) { this.destinataireNom = destinataireNom; }
+    public String getDestinataireTelephone() { return destinataireTelephone; }
+    public void setDestinataireTelephone(String destinataireTelephone) { this.destinataireTelephone = destinataireTelephone; }
+    public String getDestinataireAdresse() { return destinataireAdresse; }
+    public void setDestinataireAdresse(String destinataireAdresse) { this.destinataireAdresse = destinataireAdresse; }
+    public String getMotifModificationTarif() { return motifModificationTarif; }
+    public void setMotifModificationTarif(String motifModificationTarif) { this.motifModificationTarif = motifModificationTarif; }
+    public Long getVilleDepartId() { return villeDepartId; }
+    public void setVilleDepartId(Long villeDepartId) { this.villeDepartId = villeDepartId; }
+    public Long getVilleDestinationId() { return villeDestinationId; }
+    public void setVilleDestinationId(Long villeDestinationId) { this.villeDestinationId = villeDestinationId; }
     public Facture getFacture() { return facture; }
     public void setFacture(Facture facture) { this.facture = facture; }
 }

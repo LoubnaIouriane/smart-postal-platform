@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import StatutBadge from "../../components/StatutBadge";
 import { formatMontant } from "../../utils/formatMontant";
-import {
-  genererFacturesMensuelles,
-  getFactures,
+import {  getFactures,
   rechercherFactures,
   telechargerPdf,
 } from "../../services/factureApi";
@@ -57,25 +55,12 @@ export default function FactureList() {
     URL.revokeObjectURL(url);
   };
 
-  const handleGeneration = async () => {
-    await genererFacturesMensuelles();
-    await load();
-  };
-
   return (
     <main className="page-shell">
       <div className="page-header">
         <div>
           <p className="eyebrow">Module Facturation</p>
           <h1>Toutes les factures</h1>
-        </div>
-        <div className="header-actions">
-          <Link className="btn btn-primary" to="/commercial/factures/nouvelle">
-            Nouvelle facture
-          </Link>
-          <button className="btn btn-secondary" type="button" onClick={handleGeneration}>
-            Generation mensuelle
-          </button>
         </div>
       </div>
 
@@ -139,3 +124,4 @@ export default function FactureList() {
     </main>
   );
 }
+

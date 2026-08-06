@@ -10,8 +10,8 @@ export const getFactureById = (id) =>
 export const getFacturesByClient = (clientId) =>
   api.get(`${BASE}/client/${clientId}`).then((response) => response.data);
 
-export const createFacture = (data) =>
-  api.post(BASE, data).then((response) => response.data);
+export const genererFactureDepuisExpeditions = (data) =>
+  api.post(`${BASE}/generer`, data).then((response) => response.data);
 
 export const marquerFacturePayee = (id) =>
   api.put(`${BASE}/${id}/marquer-payee`).then((response) => response.data);

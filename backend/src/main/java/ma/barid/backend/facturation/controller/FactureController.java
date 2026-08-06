@@ -1,8 +1,8 @@
 package ma.barid.backend.facturation.controller;
 
 import jakarta.validation.Valid;
-import ma.barid.backend.facturation.dto.FactureCreateRequest;
 import ma.barid.backend.facturation.dto.FactureDTO;
+import ma.barid.backend.facturation.dto.FactureGenerationRequest;
 import ma.barid.backend.facturation.service.FactureGenerationService;
 import ma.barid.backend.facturation.service.FacturePdfService;
 import ma.barid.backend.facturation.service.FactureService;
@@ -67,12 +67,14 @@ public class FactureController {
         return factureService.rechercher(statut, debut, fin);
     }
 
-    @PostMapping
-    public ResponseEntity<FactureDTO> create(@Valid @RequestBody FactureCreateRequest request) {
-        return ResponseEntity.status(201).body(factureService.create(request));
+    @PostMapping("/generer")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<FactureDTO> genererDepuisExpeditions(@Valid @RequestBody FactureGenerationRequest request) {
+        return ResponseEntity.status(201).body(factureService.genererDepuisExpeditions(request));
     }
 
     @PutMapping({"/{id}/paiement", "/{id}/marquer-payee"})
+    @PreAuthorize("hasRole('ADMIN')")
     public FactureDTO marquerPayee(@PathVariable Long id) {
         return factureService.marquerPayee(id);
     }
@@ -95,9 +97,10 @@ public class FactureController {
     }
 
     @PostMapping("/generer-mensuelles")
-    @PreAuthorize("hasRole('COMMERCIAL')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> declencherGenerationManuelle() {
         factureGenerationService.genererFacturesMensuelles();
         return ResponseEntity.ok("Generation mensuelle declenchee manuellement");
     }
 }
+

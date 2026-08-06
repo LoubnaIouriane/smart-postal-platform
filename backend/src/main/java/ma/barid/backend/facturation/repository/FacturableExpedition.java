@@ -1,12 +1,9 @@
-package ma.barid.backend.facturation.dto;
+package ma.barid.backend.facturation.repository;
 
-public class LigneFactureDTO {
-    private Long idLigne;
-    private String designation;
-    private Integer quantite;
-    private Double prixUnitaire;
-    private Double montantLigne;
-    private Long expeditionId;
+import java.time.LocalDate;
+
+public class FacturableExpedition {
+    private Long idExpedition;
     private String codeExpedition;
     private String typeEnvoi;
     private Double poidsDeclare;
@@ -14,22 +11,15 @@ public class LigneFactureDTO {
     private String destinataireNom;
     private String destinataireTelephone;
     private String destinataireAdresse;
+    private LocalDate dateCreation;
+    private Double coutCalcule;
     private String motifModificationTarif;
+    private Long clientId;
     private Long villeDepartId;
     private Long villeDestinationId;
 
-    public Long getIdLigne() { return idLigne; }
-    public void setIdLigne(Long idLigne) { this.idLigne = idLigne; }
-    public String getDesignation() { return designation; }
-    public void setDesignation(String designation) { this.designation = designation; }
-    public Integer getQuantite() { return quantite; }
-    public void setQuantite(Integer quantite) { this.quantite = quantite; }
-    public Double getPrixUnitaire() { return prixUnitaire; }
-    public void setPrixUnitaire(Double prixUnitaire) { this.prixUnitaire = prixUnitaire; }
-    public Double getMontantLigne() { return montantLigne; }
-    public void setMontantLigne(Double montantLigne) { this.montantLigne = montantLigne; }
-    public Long getExpeditionId() { return expeditionId; }
-    public void setExpeditionId(Long expeditionId) { this.expeditionId = expeditionId; }
+    public Long getIdExpedition() { return idExpedition; }
+    public void setIdExpedition(Long idExpedition) { this.idExpedition = idExpedition; }
     public String getCodeExpedition() { return codeExpedition; }
     public void setCodeExpedition(String codeExpedition) { this.codeExpedition = codeExpedition; }
     public String getTypeEnvoi() { return typeEnvoi; }
@@ -44,8 +34,14 @@ public class LigneFactureDTO {
     public void setDestinataireTelephone(String destinataireTelephone) { this.destinataireTelephone = destinataireTelephone; }
     public String getDestinataireAdresse() { return destinataireAdresse; }
     public void setDestinataireAdresse(String destinataireAdresse) { this.destinataireAdresse = destinataireAdresse; }
+    public LocalDate getDateCreation() { return dateCreation; }
+    public void setDateCreation(LocalDate dateCreation) { this.dateCreation = dateCreation; }
+    public Double getCoutCalcule() { return coutCalcule; }
+    public void setCoutCalcule(Double coutCalcule) { this.coutCalcule = coutCalcule; }
     public String getMotifModificationTarif() { return motifModificationTarif; }
     public void setMotifModificationTarif(String motifModificationTarif) { this.motifModificationTarif = motifModificationTarif; }
+    public Long getClientId() { return clientId; }
+    public void setClientId(Long clientId) { this.clientId = clientId; }
     public Long getVilleDepartId() { return villeDepartId; }
     public void setVilleDepartId(Long villeDepartId) { this.villeDepartId = villeDepartId; }
     public Long getVilleDestinationId() { return villeDestinationId; }

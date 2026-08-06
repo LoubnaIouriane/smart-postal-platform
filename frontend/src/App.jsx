@@ -8,7 +8,6 @@ import Dashboard from "./pages/auth/Dashboard";
 import Profile from "./pages/auth/Profile";
 import CommercialList from "./pages/commercial/CommercialList";
 import FactureDetail from "./pages/facturation/FactureDetail";
-import FactureForm from "./pages/facturation/FactureForm";
 import FactureHistorique from "./pages/facturation/FactureHistorique";
 import FactureList from "./pages/facturation/FactureList";
 
@@ -57,10 +56,8 @@ function App() {
           <Route path="/commercial/liste" element={<CommercialList />} />
 
           <Route path="/factures" element={<FactureList />} />
-          <Route path="/factures/nouvelle" element={<FactureForm />} />
           <Route path="/factures/:id" element={<FactureDetail />} />
           <Route path="/commercial/factures" element={<FactureList />} />
-          <Route path="/commercial/factures/nouvelle" element={<FactureForm />} />
           <Route path="/commercial/factures/:id" element={<FactureDetail />} />
           <Route path="/client/factures" element={<FactureHistorique />} />
           <Route path="/client/factures/:id" element={<FactureDetail />} />
@@ -71,3 +68,4 @@ function App() {
 }
 
 export default App;
+

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import StatutBadge from "../../components/StatutBadge";
 import { formatMontant } from "../../utils/formatMontant";
-import { getFactureById, marquerFacturePayee, telechargerPdf } from "../../services/factureApi";
+import { getFactureById, telechargerPdf } from "../../services/factureApi";
 
 export default function FactureDetail() {
   const { id } = useParams();
@@ -21,11 +21,6 @@ export default function FactureDetail() {
   useEffect(() => {
     charger();
   }, [id]);
-
-  const marquerPayee = async () => {
-    await marquerFacturePayee(id);
-    await charger();
-  };
 
   const handlePdf = async () => {
     const blob = await telechargerPdf(id);
@@ -49,11 +44,6 @@ export default function FactureDetail() {
         </div>
         <div className="header-actions">
           <button className="btn btn-secondary" type="button" onClick={handlePdf}>Telecharger PDF</button>
-          {facture.statutPaiement !== "PAYEE" && (
-            <button className="btn btn-primary" type="button" onClick={marquerPayee}>
-              Marquer payee
-            </button>
-          )}
         </div>
       </div>
 
@@ -69,6 +59,9 @@ export default function FactureDetail() {
           <thead>
             <tr>
               <th>Designation</th>
+              <th>Code expedition</th>
+              <th>Poids reel</th>
+              <th>Destinataire</th>
               <th>Qte</th>
               <th>Prix unit.</th>
               <th>Montant</th>
@@ -78,6 +71,9 @@ export default function FactureDetail() {
             {facture.lignes.map((ligne) => (
               <tr key={ligne.idLigne}>
                 <td>{ligne.designation}</td>
+                <td>{ligne.codeExpedition || "-"}</td>
+                <td>{ligne.poidsReel ? `${ligne.poidsReel} kg` : "-"}</td>
+                <td>{ligne.destinataireNom || "-"}</td>
                 <td>{ligne.quantite}</td>
                 <td>{formatMontant(ligne.prixUnitaire)}</td>
                 <td>{formatMontant(ligne.montantLigne)}</td>
