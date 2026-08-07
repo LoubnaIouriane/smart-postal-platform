@@ -1,13 +1,15 @@
-package ma.barid.backend.zaineb.dto;
+ package ma.barid.backend.zaineb.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class CommercialCreateRequest {
 
     @NotBlank
@@ -16,8 +18,8 @@ public class CommercialCreateRequest {
     @NotBlank
     private String prenom;
 
-    @Email
     @NotBlank
+    @Email
     private String email;
 
     @NotBlank
@@ -29,5 +31,6 @@ public class CommercialCreateRequest {
     @NotBlank
     private String motDePasse;
 
+    @NotNull
     private Long agenceId;
 }

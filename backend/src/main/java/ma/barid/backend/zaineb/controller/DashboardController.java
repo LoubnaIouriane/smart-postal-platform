@@ -8,13 +8,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/commercial/dashboard")
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class DashboardController {
 
     private final DashboardService dashboardService;
 
     @GetMapping
-    public DashboardDTO getDashboard(){
+    public DashboardDTO getDashboard() {
 
         return dashboardService.getDashboard();
 
