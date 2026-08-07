@@ -13,19 +13,31 @@ import org.springframework.stereotype.Service;
 public class CommercialDashboardServiceImpl implements CommercialDashboardService {
 
     private final ClientRepository clientRepository;
+
     private final ContratClientRepository contratRepository;
 
     @Override
     public CommercialDashboardDTO getStatistiques() {
 
         return CommercialDashboardDTO.builder()
-                .nombreClients(clientRepository.count())
-                .nombreContrats(contratRepository.count())
-                .demandesEnAttente(
-                        (long) clientRepository.findByStatut(StatutClient.PRE_INSCRIPTION).size()
-                )
-                .build();
 
+                .nombreClients(
+                        clientRepository.count()
+                )
+
+                .nombreContrats(
+                        contratRepository.count()
+                )
+
+                .demandesEnAttente(
+                        (long) clientRepository
+                                .findByStatut(StatutClient.PRE_INSCRIPTION)
+                                .size()
+                )
+
+                .chiffreAffaire(0.0)
+
+                .build();
     }
 
 }

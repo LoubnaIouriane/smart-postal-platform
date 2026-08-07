@@ -1,4 +1,5 @@
-package ma.barid.backend.zaineb.serviceImpl;
+
+        package ma.barid.backend.zaineb.serviceImpl;
 
 import lombok.RequiredArgsConstructor;
 import ma.barid.backend.auth.entity.Agence;
@@ -24,25 +25,30 @@ public class CommercialServiceImpl implements CommercialService {
     private final CommercialRepository commercialRepository;
     private final CommercialMapper mapper;
 
-    // Beans IMPORTES depuis le module auth (jamais modifies, juste reutilises)
+    // Beans importés depuis le module auth
     private final RoleRepository roleRepository;
     private final AgenceRepository agenceRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public List getAll() {
-        return commercialRepository.findAll().stream().map(mapper::toDTO).toList();
+    public List<CommercialDTO> getAll() {
+        return commercialRepository.findAll()
+                .stream()
+                .map(mapper::toDTO)
+                .toList();
     }
 
     @Override
     public CommercialDTO getById(Long id) {
         Commercial commercial = commercialRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Commercial introuvable"));
+
         return mapper.toDTO(commercial);
     }
 
     @Override
     public CommercialDTO create(CommercialCreateRequest request) {
+
         if (commercialRepository.existsByIdentifiant(request.getIdentifiant())) {
             throw new RuntimeException("Cet identifiant est deja utilise");
         }
@@ -66,11 +72,14 @@ public class CommercialServiceImpl implements CommercialService {
                 .agence(agence)
                 .build();
 
-        return mapper.toDTO(commercialRepository.save(commercial));
+        Commercial savedCommercial = commercialRepository.save(commercial);
+
+        return mapper.toDTO(savedCommercial);
     }
 
     @Override
     public CommercialDTO update(Long id, CommercialCreateRequest request) {
+
         Commercial commercial = commercialRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Commercial introuvable"));
 
@@ -83,7 +92,9 @@ public class CommercialServiceImpl implements CommercialService {
         commercial.setTelephone(request.getTelephone());
         commercial.setAgence(agence);
 
-        return mapper.toDTO(commercialRepository.save(commercial));
+        Commercial updatedCommercial = commercialRepository.save(commercial);
+
+        return mapper.toDTO(updatedCommercial);
     }
 
     @Override

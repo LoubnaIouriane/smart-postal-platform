@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/commercial/dashboard")
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class CommercialDashboardController {
 
     private final CommercialDashboardService service;
@@ -21,3 +20,4 @@ public class CommercialDashboardController {
     }
 
 }
+
