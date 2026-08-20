@@ -1,8 +1,6 @@
 package ma.barid.backend.expedition;
 
-import ma.barid.backend.auth.entity.Ville;
 import ma.barid.backend.auth.repository.VilleRepository;
-import ma.barid.backend.facteur.FacteurRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

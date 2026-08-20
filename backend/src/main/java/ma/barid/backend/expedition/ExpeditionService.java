@@ -1,9 +1,9 @@
 package ma.barid.backend.expedition;
 
+import ma.barid.backend.auth.entity.Facteur;
 import ma.barid.backend.auth.entity.Ville;
+import ma.barid.backend.auth.repository.FacteurRepository;
 import ma.barid.backend.auth.repository.VilleRepository;
-import ma.barid.backend.facteur.Facteur;
-import ma.barid.backend.facteur.FacteurRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -23,10 +23,12 @@ public class ExpeditionService {
     private final VilleRepository villeRepository;
     private final FacteurRepository facteurRepository;
 
-    public ExpeditionService(ExpeditionRepository repository,
-                             TranchePoidsRepository trancheRepository,
-                             VilleRepository villeRepository,
-                             FacteurRepository facteurRepository) {
+    public ExpeditionService(
+            ExpeditionRepository repository,
+            TranchePoidsRepository trancheRepository,
+            VilleRepository villeRepository,
+            FacteurRepository facteurRepository
+    ) {
         this.repository = repository;
         this.trancheRepository = trancheRepository;
         this.villeRepository = villeRepository;
@@ -43,12 +45,14 @@ public class ExpeditionService {
         if (poidsBd.compareTo(POIDS_MIN) < 0) {
             throw new IllegalArgumentException("Le poids minimum autorisé est de 0,001 kg.");
         }
+
         if (poidsBd.compareTo(POIDS_MAX) > 0) {
             throw new IllegalArgumentException("Le poids maximum autorisé est de 31 kg.");
         }
 
         Ville depart = villeRepository.findById(request.getIdVilleDepart())
                 .orElseThrow(() -> new IllegalArgumentException("Ville de départ invalide."));
+
         Ville destination = villeRepository.findById(request.getIdVilleDestination())
                 .orElseThrow(() -> new IllegalArgumentException("Ville de destination invalide."));
 
@@ -75,7 +79,9 @@ public class ExpeditionService {
     }
 
     public List<Expedition> listerExpeditionsACollecter() {
-        return repository.findByStatutIn(List.of(StatutExpedition.EN_ATTENTE, StatutExpedition.VALIDEE));
+        return repository.findByStatutIn(
+                List.of(StatutExpedition.EN_ATTENTE, StatutExpedition.VALIDEE)
+        );
     }
 
     public List<Ville> listerVilles() {
@@ -88,7 +94,9 @@ public class ExpeditionService {
 
     public Expedition trouverParCode(String code) {
         return repository.findByCodeTracking(code)
-                .orElseThrow(() -> new IllegalArgumentException("Aucune expédition trouvée avec ce code."));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Aucune expédition trouvée avec ce code."
+                ));
     }
 
     public Expedition changerStatut(Long id, StatutExpedition nouveauStatut) {
@@ -97,7 +105,8 @@ public class ExpeditionService {
 
         if (!transitionAutorisee(expedition.getStatut(), nouveauStatut)) {
             throw new IllegalArgumentException(
-                    "Transition interdite : " + expedition.getStatut() + " → " + nouveauStatut);
+                    "Transition interdite : " + expedition.getStatut() + " → " + nouveauStatut
+            );
         }
 
         expedition.setStatut(nouveauStatut);
@@ -109,14 +118,6 @@ public class ExpeditionService {
         return repository.save(expedition);
     }
 
-    private boolean transitionAutorisee(StatutExpedition actuel, StatutExpedition nouveau) {
-        return switch (actuel) {
-            case EN_ATTENTE -> nouveau == StatutExpedition.VALIDEE || nouveau == StatutExpedition.ANNULEE;
-            case VALIDEE -> nouveau == StatutExpedition.COLLECTEE || nouveau == StatutExpedition.ANNULEE;
-            case COLLECTEE, ANNULEE -> false;
-        };
-    }
-
     public Expedition annulerExpedition(Long id) {
         Expedition expedition = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Expédition introuvable."));
@@ -124,30 +125,41 @@ public class ExpeditionService {
         if (expedition.getStatut() == StatutExpedition.ANNULEE) {
             throw new IllegalArgumentException("Cette expédition est déjà annulée.");
         }
+
         if (expedition.getStatut() == StatutExpedition.COLLECTEE) {
-            throw new IllegalArgumentException("Impossible d'annuler une expédition déjà collectée.");
+            throw new IllegalArgumentException(
+                    "Impossible d'annuler une expédition déjà collectée."
+            );
         }
 
         if (expedition.getHeureCollecte() != null) {
-            long minutesRestantes = ChronoUnit.MINUTES.between(LocalDateTime.now(), expedition.getHeureCollecte());
+            long minutesRestantes = ChronoUnit.MINUTES.between(
+                    LocalDateTime.now(),
+                    expedition.getHeureCollecte()
+            );
+
             if (minutesRestantes < DELAI_ANNULATION_MINUTES) {
                 throw new IllegalArgumentException(
-                        "Annulation impossible : moins de 10 minutes avant la collecte.");
+                        "Annulation impossible : moins de 10 minutes avant la collecte."
+                );
             }
         }
 
         expedition.setStatut(StatutExpedition.ANNULEE);
         expedition.setDateAnnulation(LocalDateTime.now());
+
         return repository.save(expedition);
     }
 
     public Expedition assignerFacteur(Long idExpedition, Long idFacteur) {
         Expedition expedition = repository.findById(idExpedition)
                 .orElseThrow(() -> new IllegalArgumentException("Expédition introuvable."));
+
         Facteur facteur = facteurRepository.findById(idFacteur)
                 .orElseThrow(() -> new IllegalArgumentException("Facteur introuvable."));
 
         expedition.setFacteurAssigne(facteur);
+
         return repository.save(expedition);
     }
 
@@ -163,7 +175,23 @@ public class ExpeditionService {
         }
 
         expedition.setStatut(StatutExpedition.COLLECTEE);
+
         return repository.save(expedition);
+    }
+
+    private boolean transitionAutorisee(
+            StatutExpedition actuel,
+            StatutExpedition nouveau
+    ) {
+        return switch (actuel) {
+            case EN_ATTENTE ->
+                    nouveau == StatutExpedition.VALIDEE
+                            || nouveau == StatutExpedition.ANNULEE;
+            case VALIDEE ->
+                    nouveau == StatutExpedition.COLLECTEE
+                            || nouveau == StatutExpedition.ANNULEE;
+            case COLLECTEE, ANNULEE -> false;
+        };
     }
 
     private String genererCodeTracking() {
@@ -173,6 +201,7 @@ public class ExpeditionService {
 
     private BigDecimal calculerPrix(Double poids) {
         BigDecimal poidsBd = BigDecimal.valueOf(poids);
+
         return trancheRepository.findTrancheForPoids(poidsBd)
                 .map(TranchePoids::getPrix)
                 .orElse(BigDecimal.ZERO);

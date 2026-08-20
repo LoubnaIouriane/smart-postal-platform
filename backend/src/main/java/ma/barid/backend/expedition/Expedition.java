@@ -2,11 +2,12 @@ package ma.barid.backend.expedition;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import ma.barid.backend.auth.entity.Facteur;
 import ma.barid.backend.auth.entity.Ville;
-import ma.barid.backend.facteur.Facteur;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -47,11 +48,9 @@ public class Expedition {
     @JoinColumn(name = "id_facteur")
     private Facteur facteurAssigne;
 
-    // ===== Expéditeur (client) =====
     private String telephoneExpediteur;
     private String adresseExpediteur;
 
-    // ===== Destinataire =====
     private String nomDestinataire;
     private String telephoneDestinataire;
     private String adresseDestinataire;
@@ -62,5 +61,5 @@ public class Expedition {
 
     private LocalDateTime dateAnnulation;
 
-    private java.math.BigDecimal montant;
+    private BigDecimal montant;
 }

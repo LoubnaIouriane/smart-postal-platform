@@ -1,7 +1,7 @@
 package ma.barid.backend.expedition;
 
+import ma.barid.backend.auth.entity.Facteur;
 import ma.barid.backend.auth.entity.Ville;
-import ma.barid.backend.facteur.Facteur;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,7 +58,10 @@ public class ExpeditionController {
     }
 
     @PatchMapping("/{id}/statut")
-    public ResponseEntity<?> changerStatut(@PathVariable Long id, @RequestBody ChangerStatutRequest request) {
+    public ResponseEntity<?> changerStatut(
+            @PathVariable Long id,
+            @RequestBody ChangerStatutRequest request
+    ) {
         try {
             return ResponseEntity.ok(service.changerStatut(id, request.getStatut()));
         } catch (IllegalArgumentException e) {
@@ -76,7 +79,10 @@ public class ExpeditionController {
     }
 
     @PatchMapping("/{id}/facteur")
-    public ResponseEntity<?> assignerFacteur(@PathVariable Long id, @RequestBody AssignerFacteurRequest request) {
+    public ResponseEntity<?> assignerFacteur(
+            @PathVariable Long id,
+            @RequestBody AssignerFacteurRequest request
+    ) {
         try {
             return ResponseEntity.ok(service.assignerFacteur(id, request.getIdFacteur()));
         } catch (IllegalArgumentException e) {
@@ -85,7 +91,10 @@ public class ExpeditionController {
     }
 
     @PatchMapping("/{id}/poids-reel")
-    public ResponseEntity<?> enregistrerPoidsReel(@PathVariable Long id, @RequestBody PoidsReelRequest request) {
+    public ResponseEntity<?> enregistrerPoidsReel(
+            @PathVariable Long id,
+            @RequestBody PoidsReelRequest request
+    ) {
         try {
             return ResponseEntity.ok(service.enregistrerPoidsReel(id, request.getPoidsReel()));
         } catch (IllegalArgumentException e) {
