@@ -199,28 +199,11 @@ public class AdminServiceImpl implements AdminService {
         commercial.setTelephone(request.getTelephone());
         commercial.setAgence(nouvelleAgence);
 
-        if(!commercial.getEmail()
-                .equalsIgnoreCase(request.getEmail())){
-
-
-            if(utilisateurRepository.existsByEmail(request.getEmail())){
-                throw new RuntimeException(
-                        "Cet email est deja utilise");
-            }
-
-
-            commercial.setEmail(request.getEmail());
-
-        }
-
-
-        if (!commercial.getEmail()
-                .equalsIgnoreCase(request.getEmail())) {
-
+        // CORRIGE : un seul bloc au lieu de deux blocs identiques dupliques
+        if (!commercial.getEmail().equalsIgnoreCase(request.getEmail())) {
             if (utilisateurRepository.existsByEmail(request.getEmail())) {
                 throw new RuntimeException("Cet email est deja utilise");
             }
-
             commercial.setEmail(request.getEmail());
         }
 
@@ -315,39 +298,24 @@ public class AdminServiceImpl implements AdminService {
         String identifiant = genererIdentifiant("com", nom);
         String motDePasseClair = genererMotDePasseAleatoire();
 
-        Utilisateur utilisateur = Utilisateur.builder()
+        // CORRIGE : plus de creation manuelle d'Utilisateur en double.
+        // Commercial herite de Utilisateur (JOINED) : ce seul save() cree
+        // AUTOMATIQUEMENT la ligne "utilisateur" ET la ligne "commercial".
+        // (avant : un 2eme insert dans "utilisateur" avec le meme email provoquait
+        // "Duplicate entry ... for key utilisateur.UK..." et bloquait tout avant
+        // meme d'atteindre emailService.envoyerIdentifiants())
+        Commercial commercial = Commercial.builder()
                 .identifiant(identifiant)
                 .motDePasse(passwordEncoder.encode(motDePasseClair))
                 .email(email)
                 .actif(true)
                 .dateCreation(LocalDateTime.now())
                 .role(role)
+                .nom(nom)
+                .prenom(prenom)
+                .telephone(telephone)
+                .agence(agence)
                 .build();
-        utilisateurRepository.save(utilisateur);
-
-        Commercial commercial =
-                Commercial.builder()
-
-                        .nom(nom)
-                        .prenom(prenom)
-                        .telephone(telephone)
-
-                        .identifiant(identifiant)
-                        .email(email)
-
-                        .motDePasse(
-                                passwordEncoder.encode(motDePasseClair))
-
-                        .actif(true)
-
-                        .dateCreation(LocalDateTime.now())
-
-                        .role(role)
-
-                        .agence(agence)
-
-                        .build();
-
 
         commercialRepository.save(commercial);
 
@@ -370,6 +338,8 @@ public class AdminServiceImpl implements AdminService {
         String identifiant = genererIdentifiant("fac", nom);
         String motDePasseClair = genererMotDePasseAleatoire();
 
+        // Facteur n'herite PAS de Utilisateur (relation @OneToOne explicite) :
+        // ici il FAUT bien creer l'Utilisateur separement puis le referencer. Ne pas toucher.
         Utilisateur utilisateur = Utilisateur.builder()
                 .identifiant(identifiant)
                 .motDePasse(passwordEncoder.encode(motDePasseClair))
@@ -454,42 +424,21 @@ public class AdminServiceImpl implements AdminService {
                         facteur.map(Facteur::getTelephone)
                                 .orElse(null)
                 )
-                .emailCommercial(
-                        commercial.map(c -> c.getEmail())
-                                .orElse(null)
-                )
 
                 .build();
     }
 
-    private CommercialResponse toCommercialResponse(
-            Commercial c){
-
-
+    private CommercialResponse toCommercialResponse(Commercial c) {
         return CommercialResponse.builder()
-
                 .idCommercial(c.getIdUtilisateur())
-
                 .nom(c.getNom())
-
                 .prenom(c.getPrenom())
-
                 .identifiant(c.getIdentifiant())
-
                 .email(c.getEmail())
-
                 .telephone(c.getTelephone())
-
-                .idAgence(
-                        c.getAgence()
-                                .getIdAgence())
-
-                .nomAgence(
-                        c.getAgence()
-                                .getNomAgence())
-
+                .idAgence(c.getAgence().getIdAgence())
+                .nomAgence(c.getAgence().getNomAgence())
                 .actif(c.getActif())
-
                 .build();
     }
 
