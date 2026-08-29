@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import ma.barid.backend.auth.entity.Ville;
-import ma.barid.backend.facteur.Facteur;
+import ma.barid.backend.auth.entity.Facteur;
 
 import java.time.LocalDateTime;
 
@@ -47,11 +47,9 @@ public class Expedition {
     @JoinColumn(name = "id_facteur")
     private Facteur facteurAssigne;
 
-    // ===== Expéditeur (client) =====
     private String telephoneExpediteur;
     private String adresseExpediteur;
 
-    // ===== Destinataire =====
     private String nomDestinataire;
     private String telephoneDestinataire;
     private String adresseDestinataire;

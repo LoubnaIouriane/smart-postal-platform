@@ -1,9 +1,9 @@
 package ma.barid.backend.expedition;
 
+import ma.barid.backend.auth.entity.Facteur;
 import ma.barid.backend.auth.entity.Ville;
+import ma.barid.backend.auth.repository.FacteurRepository;
 import ma.barid.backend.auth.repository.VilleRepository;
-import ma.barid.backend.facteur.Facteur;
-import ma.barid.backend.facteur.FacteurRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

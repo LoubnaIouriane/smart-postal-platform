@@ -1,7 +1,7 @@
 package ma.barid.backend.expedition;
 
+import ma.barid.backend.auth.entity.Facteur;
 import ma.barid.backend.auth.entity.Ville;
-import ma.barid.backend.facteur.Facteur;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
