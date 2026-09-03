@@ -16,7 +16,7 @@ public class ClientReadController {
     private final ClientRepository clientRepository; // repository d'Etudiant 1, reutilise tel quel
 
     @GetMapping
-    public List getAll() {
+    public List<ClientSummaryDTO> getAll() {
         return clientRepository.findAll().stream()
                 .map(this::toSummary)
                 .toList();
@@ -31,6 +31,7 @@ public class ClientReadController {
                 .ville(c.getVille() != null ? c.getVille().getNomVille() : null)
                 .agence(c.getAgence() != null ? c.getAgence().getNomAgence() : null)
                 .statut(c.getStatut().name())
+                .dateInscription(c.getDateCreation()) // AJOUTE : champ herite de Utilisateur
                 .build();
     }
 }

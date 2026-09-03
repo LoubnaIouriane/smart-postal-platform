@@ -1,6 +1,5 @@
 package ma.barid.backend.auth.serviceImpl;
 
-
 import ma.barid.backend.auth.dto.*;
 
 import ma.barid.backend.auth.entity.Agence;
@@ -9,9 +8,8 @@ import ma.barid.backend.auth.entity.Role;
 import ma.barid.backend.auth.entity.Utilisateur;
 import ma.barid.backend.auth.entity.Ville;
 
-
 import ma.barid.backend.auth.enums.RoleName;
-
+import ma.barid.backend.auth.enums.StatutClient;
 
 import ma.barid.backend.auth.repository.AgenceRepository;
 import ma.barid.backend.auth.repository.ClientRepository;
@@ -20,25 +18,29 @@ import ma.barid.backend.auth.repository.RoleRepository;
 import ma.barid.backend.auth.repository.UtilisateurRepository;
 import ma.barid.backend.auth.repository.VilleRepository;
 
+import ma.barid.backend.expedition.ExpeditionRepository;
 
 import ma.barid.backend.zaineb.entity.Commercial;
 import ma.barid.backend.zaineb.repository.CommercialRepository;
 
-
 import ma.barid.backend.auth.service.AdminService;
 import ma.barid.backend.auth.service.EmailService;
-
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.temporal.TemporalAdjusters;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +53,7 @@ public class AdminServiceImpl implements AdminService {
     private final ClientRepository clientRepository;
     private final CommercialRepository commercialRepository;
     private final FacteurRepository facteurRepository;
+    private final ExpeditionRepository expeditionRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
@@ -59,11 +62,105 @@ public class AdminServiceImpl implements AdminService {
     // =========================================================
     @Override
     public DashboardStatsResponse getDashboardStats() {
+
+        List<ma.barid.backend.auth.entity.Client> tousLesClients = clientRepository.findAll();
+        List<ma.barid.backend.expedition.Expedition> toutesLesExpeditions = expeditionRepository.findAll();
+
+        // ---- Line chart : pre-inscriptions par mois (6 derniers mois) ----
+        Map<String, Long> parMois = new LinkedHashMap<>();
+        YearMonth moisCourant = YearMonth.now();
+        for (int i = 5; i >= 0; i--) {
+            YearMonth mois = moisCourant.minusMonths(i);
+            long count = tousLesClients.stream()
+                    .filter(c -> c.getDateCreation() != null)
+                    .filter(c -> YearMonth.from(c.getDateCreation()).equals(mois))
+                    .count();
+            parMois.put(mois.toString(), count);
+        }
+
+        // ---- Bar chart : expeditions par statut ----
+        Map<String, Long> statutExpeditions = toutesLesExpeditions.stream()
+                .collect(Collectors.groupingBy(e -> e.getStatut().name(), Collectors.counting()));
+
+        // ---- Bar chart : clients par ville ----
+        Map<String, Long> clientsParVille = tousLesClients.stream()
+                .filter(c -> c.getVille() != null)
+                .collect(Collectors.groupingBy(c -> c.getVille().getNomVille(), Collectors.counting()));
+
+        // ---- Activite (nombre de pre-inscriptions creees) ----
+        LocalDate aujourdHui = LocalDate.now();
+        LocalDate debutSemaine = aujourdHui.with(TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
+        LocalDate debutMois = aujourdHui.withDayOfMonth(1);
+
+        long activiteAujourdHui = tousLesClients.stream()
+                .filter(c -> c.getDateCreation() != null)
+                .filter(c -> c.getDateCreation().toLocalDate().equals(aujourdHui))
+                .count();
+        long activiteCetteSemaine = tousLesClients.stream()
+                .filter(c -> c.getDateCreation() != null)
+                .filter(c -> !c.getDateCreation().toLocalDate().isBefore(debutSemaine))
+                .count();
+        long activiteCeMois = tousLesClients.stream()
+                .filter(c -> c.getDateCreation() != null)
+                .filter(c -> !c.getDateCreation().toLocalDate().isBefore(debutMois))
+                .count();
+
+        // ---- Team performance ----
+        long totalClients = tousLesClients.size();
+        long clientsValides = tousLesClients.stream()
+                .filter(c -> c.getStatut() == StatutClient.VALIDE)
+                .count();
+        double tauxValidationCommerciaux = totalClients == 0 ? 0.0 :
+                Math.round((clientsValides * 100.0 / totalClients) * 10) / 10.0;
+
+        long totalAgences = agenceRepository.count();
+        long agencesCompletes = agenceRepository.findAll().stream()
+                .filter(a -> commercialRepository.existsByAgence_IdAgence(a.getIdAgence())
+                        && facteurRepository.existsByAgence_IdAgence(a.getIdAgence()))
+                .count();
+        double tauxAgencesCompletes = totalAgences == 0 ? 0.0 :
+                Math.round((agencesCompletes * 100.0 / totalAgences) * 10) / 10.0;
+
+        long totalExpeditionsAssignees = toutesLesExpeditions.stream()
+                .filter(e -> e.getFacteurAssigne() != null)
+                .count();
+        long expeditionsLivrees = toutesLesExpeditions.stream()
+                .filter(e -> e.getStatut() == ma.barid.backend.expedition.StatutExpedition.COLLECTEE)
+                .count();
+        double tauxLivraisonFacteurs = totalExpeditionsAssignees == 0 ? 0.0 :
+                Math.round((expeditionsLivrees * 100.0 / totalExpeditionsAssignees) * 10) / 10.0;
+
+        // ---- Calendrier du jour ----
+        long preInscriptionsAValider = tousLesClients.stream()
+                .filter(c -> c.getStatut() == StatutClient.PRE_INSCRIPTION)
+                .count();
+
+        long colisADistribuerAujourdHui = toutesLesExpeditions.stream()
+                .filter(e -> e.getStatut() == ma.barid.backend.expedition.StatutExpedition.EN_ATTENTE)
+                .count();
+
+        long expeditionsCreesAujourdHui = toutesLesExpeditions.stream()
+                .filter(e -> e.getDateCreation() != null)
+                .filter(e -> e.getDateCreation().toLocalDate().equals(aujourdHui))
+                .count();
+
         return DashboardStatsResponse.builder()
-                .nombreClients(clientRepository.count())
+                .nombreClients(totalClients)
                 .nombreCommerciaux(commercialRepository.count())
                 .nombreFacteurs(facteurRepository.count())
-                .nombreAgences(agenceRepository.count())
+                .nombreAgences(totalAgences)
+                .preInscriptionsParMois(parMois)
+                .statutExpeditions(statutExpeditions)
+                .clientsParVille(clientsParVille)
+                .activiteAujourdHui(activiteAujourdHui)
+                .activiteCetteSemaine(activiteCetteSemaine)
+                .activiteCeMois(activiteCeMois)
+                .tauxLivraisonFacteurs(tauxLivraisonFacteurs)
+                .tauxValidationCommerciaux(tauxValidationCommerciaux)
+                .tauxAgencesCompletes(tauxAgencesCompletes)
+                .colisADistribuerAujourdHui(colisADistribuerAujourdHui)
+                .preInscriptionsAValider(preInscriptionsAValider)
+                .expeditionsCreesAujourdHui(expeditionsCreesAujourdHui)
                 .build();
     }
 
@@ -103,7 +200,6 @@ public class AdminServiceImpl implements AdminService {
                 .build();
         agenceRepository.save(agence);
 
-        // Creation optionnelle du commercial en meme temps que l'agence
         if (estRempli(request.getCommercialNom())) {
             if (!estRempli(request.getCommercialEmail())) {
                 throw new RuntimeException("L'email du commercial est obligatoire si son nom est renseigne");
@@ -112,7 +208,6 @@ public class AdminServiceImpl implements AdminService {
                     request.getCommercialTelephone(), request.getCommercialEmail());
         }
 
-        // Creation optionnelle du facteur en meme temps que l'agence
         if (estRempli(request.getFacteurNom())) {
             if (!estRempli(request.getFacteurEmail())) {
                 throw new RuntimeException("L'email du facteur est obligatoire si son nom est renseigne");
@@ -147,16 +242,13 @@ public class AdminServiceImpl implements AdminService {
                 .orElseThrow(() -> new RuntimeException("Agence introuvable"));
 
         if (clientRepository.existsByAgence_IdAgence(idAgence)) {
-            throw new RuntimeException(
-                    "Impossible de supprimer cette agence : des clients y sont encore rattaches.");
+            throw new RuntimeException("Impossible de supprimer cette agence : des clients y sont encore rattaches.");
         }
         if (commercialRepository.existsByAgence_IdAgence(idAgence)) {
-            throw new RuntimeException(
-                    "Impossible de supprimer cette agence : un commercial y est encore affecte. Supprimez-le d'abord.");
+            throw new RuntimeException("Impossible de supprimer cette agence : un commercial y est encore affecte. Supprimez-le d'abord.");
         }
         if (facteurRepository.existsByAgence_IdAgence(idAgence)) {
-            throw new RuntimeException(
-                    "Impossible de supprimer cette agence : un facteur y est encore affecte. Supprimez-le d'abord.");
+            throw new RuntimeException("Impossible de supprimer cette agence : un facteur y est encore affecte. Supprimez-le d'abord.");
         }
 
         agenceRepository.delete(agence);
@@ -199,7 +291,6 @@ public class AdminServiceImpl implements AdminService {
         commercial.setTelephone(request.getTelephone());
         commercial.setAgence(nouvelleAgence);
 
-        // CORRIGE : un seul bloc au lieu de deux blocs identiques dupliques
         if (!commercial.getEmail().equalsIgnoreCase(request.getEmail())) {
             if (utilisateurRepository.existsByEmail(request.getEmail())) {
                 throw new RuntimeException("Cet email est deja utilise");
@@ -216,7 +307,7 @@ public class AdminServiceImpl implements AdminService {
     public void deleteCommercial(Long id) {
         Commercial commercial = commercialRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Commercial introuvable"));
-        commercialRepository.delete(commercial); // cascade -> supprime aussi le compte de connexion
+        commercialRepository.delete(commercial);
     }
 
     // =========================================================
@@ -273,11 +364,11 @@ public class AdminServiceImpl implements AdminService {
     public void deleteFacteur(Long id) {
         Facteur facteur = facteurRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Facteur introuvable"));
-        facteurRepository.delete(facteur); // cascade -> supprime aussi le compte de connexion
+        facteurRepository.delete(facteur);
     }
 
     // =========================================================
-    // HELPERS PRIVES REUTILISABLES
+    // HELPERS PRIVES
     // =========================================================
     private boolean estRempli(String valeur) {
         return valeur != null && !valeur.isBlank();
@@ -298,12 +389,6 @@ public class AdminServiceImpl implements AdminService {
         String identifiant = genererIdentifiant("com", nom);
         String motDePasseClair = genererMotDePasseAleatoire();
 
-        // CORRIGE : plus de creation manuelle d'Utilisateur en double.
-        // Commercial herite de Utilisateur (JOINED) : ce seul save() cree
-        // AUTOMATIQUEMENT la ligne "utilisateur" ET la ligne "commercial".
-        // (avant : un 2eme insert dans "utilisateur" avec le meme email provoquait
-        // "Duplicate entry ... for key utilisateur.UK..." et bloquait tout avant
-        // meme d'atteindre emailService.envoyerIdentifiants())
         Commercial commercial = Commercial.builder()
                 .identifiant(identifiant)
                 .motDePasse(passwordEncoder.encode(motDePasseClair))
@@ -338,8 +423,6 @@ public class AdminServiceImpl implements AdminService {
         String identifiant = genererIdentifiant("fac", nom);
         String motDePasseClair = genererMotDePasseAleatoire();
 
-        // Facteur n'herite PAS de Utilisateur (relation @OneToOne explicite) :
-        // ici il FAUT bien creer l'Utilisateur separement puis le referencer. Ne pas toucher.
         Utilisateur utilisateur = Utilisateur.builder()
                 .identifiant(identifiant)
                 .motDePasse(passwordEncoder.encode(motDePasseClair))
@@ -382,12 +465,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     private AgenceResponse toAgenceResponse(Agence a) {
-
-        Optional<Commercial> commercial =
-                commercialRepository.findByAgence_IdAgence(a.getIdAgence());
-
-        Optional<Facteur> facteur =
-                facteurRepository.findByAgence_IdAgence(a.getIdAgence());
+        Optional<Commercial> commercial = commercialRepository.findByAgence_IdAgence(a.getIdAgence());
+        Optional<Facteur> facteur = facteurRepository.findByAgence_IdAgence(a.getIdAgence());
 
         return AgenceResponse.builder()
                 .idAgence(a.getIdAgence())
@@ -395,36 +474,15 @@ public class AdminServiceImpl implements AdminService {
                 .adresse(a.getAdresse())
                 .telephone(a.getTelephone())
                 .email(a.getEmail())
-
                 .idVille(a.getVille().getIdVille())
                 .nomVille(a.getVille().getNomVille())
-
-                // Commercial
                 .hasCommercial(commercial.isPresent())
-                .nomCommercial(
-                        commercial.map(c -> c.getPrenom() + " " + c.getNom())
-                                .orElse(null)
-                )
-                .telephoneCommercial(
-                        commercial.map(Commercial::getTelephone)
-                                .orElse(null)
-                )
-                .emailCommercial(
-                        commercial.map(Commercial::getEmail)
-                                .orElse(null)
-                )
-
-                // Facteur
+                .nomCommercial(commercial.map(c -> c.getPrenom() + " " + c.getNom()).orElse(null))
+                .telephoneCommercial(commercial.map(Commercial::getTelephone).orElse(null))
+                .emailCommercial(commercial.map(Commercial::getEmail).orElse(null))
                 .hasFacteur(facteur.isPresent())
-                .nomFacteur(
-                        facteur.map(f -> f.getPrenom() + " " + f.getNom())
-                                .orElse(null)
-                )
-                .telephoneFacteur(
-                        facteur.map(Facteur::getTelephone)
-                                .orElse(null)
-                )
-
+                .nomFacteur(facteur.map(f -> f.getPrenom() + " " + f.getNom()).orElse(null))
+                .telephoneFacteur(facteur.map(Facteur::getTelephone).orElse(null))
                 .build();
     }
 

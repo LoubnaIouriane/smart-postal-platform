@@ -34,6 +34,7 @@ public class ValidationCommercialController {
                         .telephone(c.getTelephone())
                         .ville(c.getVille().getNomVille())
                         .statut(c.getStatut().name())
+                        .dateCreation(c.getDateCreation())
                         .build())
                 .toList();
         return ResponseEntity.ok(result);
