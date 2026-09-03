@@ -22,6 +22,9 @@ export default function FactureDetail() {
     charger();
   }, [id]);
 
+  if (error) return <main className="page-shell"><p className="alert-error">{error}</p></main>;
+  if (!facture) return <main className="page-shell"><p className="muted">Chargement...</p></main>;
+
   const handlePdf = async () => {
     const blob = await telechargerPdf(id);
     const url = URL.createObjectURL(blob);
@@ -31,9 +34,6 @@ export default function FactureDetail() {
     link.click();
     URL.revokeObjectURL(url);
   };
-
-  if (error) return <main className="page-shell"><p className="alert-error">{error}</p></main>;
-  if (!facture) return <main className="page-shell"><p className="muted">Chargement...</p></main>;
 
   return (
     <main className="page-shell detail-page">
@@ -46,14 +46,12 @@ export default function FactureDetail() {
           <button className="btn btn-secondary" type="button" onClick={handlePdf}>Telecharger PDF</button>
         </div>
       </div>
-
       <section className="summary-grid">
         <div><span>Client</span><strong>{facture.clientRaisonSociale}</strong></div>
         <div><span>Emission</span><strong>{facture.dateEmission}</strong></div>
         <div><span>Echeance</span><strong>{facture.dateEcheance}</strong></div>
         <div><span>Statut</span><strong><StatutBadge statut={facture.statutPaiement} /></strong></div>
       </section>
-
       <section className="table-wrap">
         <table>
           <thead>
@@ -82,7 +80,6 @@ export default function FactureDetail() {
           </tbody>
         </table>
       </section>
-
       <section className="totals">
         <p>Montant HT brut <strong>{formatMontant(facture.montantHT)}</strong></p>
         {facture.tauxRemise > 0 && (
@@ -92,7 +89,6 @@ export default function FactureDetail() {
         <p className="grand-total">Total TTC <strong>{formatMontant(facture.montantTTC)}</strong></p>
         {facture.datePaiement && <p>Payee le <strong>{facture.datePaiement}</strong></p>}
       </section>
-
       <Link className="back-link" to="/commercial/factures">Retour aux factures</Link>
     </main>
   );

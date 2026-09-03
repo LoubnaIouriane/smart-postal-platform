@@ -6,6 +6,7 @@ const MENU = [
     { to: "/commercial/contrats", label: "Contrats", icon: "📄" },
     { to: "/commercial/commerciaux", label: "Commerciaux", icon: "🧑‍💼" },
     { to: "/commercial/grilles-remise", label: "Grilles de remise", icon: "💳" },
+    { to: "/commercial/factures", label: "Factures", icon: "🧾" },
 ];
 
 export default function Sidebar() {
