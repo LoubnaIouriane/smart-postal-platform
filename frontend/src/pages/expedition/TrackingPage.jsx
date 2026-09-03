@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Navbar from "../../components/layout/Navbar";
 import { expeditionService } from "../../services/expeditionService";
 import StatusTimeline from "../../components/expedition/StatusTimeline";
 import "../../components/expedition/expedition.css";
@@ -42,6 +43,8 @@ export default function TrackingPage() {
     };
 
     return (
+        <>
+        <Navbar />
         <div className="tracking-page">
             <div className="tracking-hero">
                 <h1>Suivi d'expédition</h1>
@@ -160,5 +163,6 @@ export default function TrackingPage() {
                 </div>
             )}
         </div>
+        </>
     );
 }

@@ -48,63 +48,36 @@ export default function GrilleRemiseList() {
 
 
 
+const [error, setError] = useState("");
 
+const handleSubmit = async () => {
+    setError("");
+    try {
+        for (const remise of remises) {
+            if (remise.tauxRemise === "") continue; // ignore les lignes non remplies
 
-    const handleSubmit = async () => {
-
-
-        try {
-
-
-            for (const remise of remises) {
-
-
-                await saveGrilleRemise({
-
-                    nomGrille:
-                        remise.montantApres
-                            ?
-                            `${remise.montantAvant}-${remise.montantApres}`
-                            :
-                            `${remise.montantAvant}+`,
-
-
-                    poids: 0,
-
-
-                    montantAvant: remise.montantAvant,
-
-
-                    montantApres: remise.montantApres,
-
-
-                    tauxRemise: Number(remise.tauxRemise),
-
-
-                    couleur: remise.couleur
-
-                });
-
-
-            }
-
-
-            alert("Les remises ont été enregistrées");
-
-
-        } catch(error) {
-
-
-            console.error(error);
-
-            alert("Erreur lors de l'enregistrement");
-
-
+            await saveGrilleRemise({
+                nomGrille: remise.montantApres
+                    ? `${remise.montantAvant}-${remise.montantApres}`
+                    : `${remise.montantAvant}+`,
+                poids: 0,
+                montantAvant: remise.montantAvant,
+                montantApres: remise.montantApres,
+                tauxRemise: Number(remise.tauxRemise),
+                couleur: remise.couleur,
+            });
         }
+        alert("Les remises ont été enregistrées");
+    } catch (error) {
+        console.error("Erreur enregistrement grille :", error.response?.data || error.message);
+        setError(
+            error.response?.data?.message ||
+            (typeof error.response?.data === "object" ? JSON.stringify(error.response.data) : "Erreur lors de l'enregistrement")
+        );
+    }
+};
 
-
-    };
-
+    
 
 
 
@@ -233,7 +206,7 @@ export default function GrilleRemiseList() {
             </div>
 
 
-
+       {error && <p style={{ color: "#D9534F", marginTop: 12 }}>{error}</p>}
 
             <button
 

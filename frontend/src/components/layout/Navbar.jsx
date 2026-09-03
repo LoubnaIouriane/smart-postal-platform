@@ -13,7 +13,24 @@ export default function Navbar() {
 
     return (
         <div className="navbar">
-            <div className="navbar-brand">
+            <div className="navbar-brand" style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                {isAuthenticated && (
+                    <button
+                        onClick={() => navigate(-1)}
+                        title="Retour"
+                        style={{
+                            background: "transparent",
+                            border: "1px solid rgba(0,0,0,0.15)",
+                            borderRadius: 8,
+                            width: 30,
+                            height: 30,
+                            cursor: "pointer",
+                            fontSize: 15,
+                        }}
+                    >
+                        ⬅
+                    </button>
+                )}
                 <BrandMark size={36} />
                 <span className="navbar-title">Smart Postal Platform</span>
             </div>

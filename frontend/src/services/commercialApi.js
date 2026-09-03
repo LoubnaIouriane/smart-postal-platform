@@ -89,10 +89,10 @@ export const deleteGrille = (id) =>
 
 
 
-// ================= REMISE CLIENT =================
+// ================= REMISE CLIENT (CORRIGE : plus de "/client/" en trop) =================
 
 export const getRemisesByClient = (clientId) =>
-    api.get(`/commercial/remises-client/client/${clientId}`)
+    api.get(`/commercial/remises-client/${clientId}`)
         .then(r => r.data);
 
 
@@ -110,19 +110,19 @@ export const deleteRemiseClient = (id) =>
 // ================= PRE-INSCRIPTIONS =================
 
 export const getPreInscriptions = () =>
-    api.get("/commercial/preinscriptions")
+    api.get("/commercial/pre-inscriptions")
         .then(r => r.data);
 
 
 
 export const validerPreInscription = (id) =>
-    api.put(`/commercial/preinscriptions/${id}/valider`)
+   api.post(`/commercial/pre-inscriptions/${id}/valider`)
         .then(r => r.data);
 
 
 
 export const refuserPreInscription = (id) =>
-    api.put(`/commercial/preinscriptions/${id}/refuser`)
+api.post(`/commercial/pre-inscriptions/${id}/refuser`)
         .then(r => r.data);
 
 

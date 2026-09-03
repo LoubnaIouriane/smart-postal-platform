@@ -36,7 +36,6 @@ textarea {
   font: inherit;
 }
 
-<<<<<<< HEAD
 button {
   cursor: pointer;
   border: none;
@@ -73,7 +72,8 @@ input:focus,
 select:focus,
 textarea:focus {
   border-color: var(--color-primary);
-=======
+}
+
 .page-shell {
   width: 100%;
   padding: 32px;
@@ -139,43 +139,36 @@ textarea:focus {
   color: #111827;
 }
 
-input,
-select {
-  min-height: 38px;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  padding: 7px 10px;
-}
-
 .table-wrap {
   width: 100%;
   overflow-x: auto;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   margin-top: 18px;
->>>>>>> origin/feature/facturation
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-<<<<<<< HEAD
   background: var(--color-surface);
 }
 
 thead {
   background: var(--color-primary);
   color: white;
-=======
->>>>>>> origin/feature/facturation
 }
 
 th,
 td {
-<<<<<<< HEAD
-  padding: 12px;
+  padding: 12px 14px;
   border-bottom: 1px solid var(--color-border);
   text-align: left;
+}
+
+th {
+  color: #475569;
+  font-size: 13px;
+  text-transform: uppercase;
 }
 
 tbody tr:hover {
@@ -211,16 +204,6 @@ tbody tr:hover {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-primary-hover);
-}
-=======
-  padding: 12px 14px;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-th {
-  color: #475569;
-  font-size: 13px;
-  text-transform: uppercase;
 }
 
 .status-badge {
@@ -311,4 +294,3 @@ th {
     grid-template-columns: 1fr;
   }
 }
->>>>>>> origin/feature/facturation

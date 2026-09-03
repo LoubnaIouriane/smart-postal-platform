@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CommercialLayout from "../../components/commercial/CommercialLayout";
-import { createGrille } from "../../services/commercialApi";
-
+import { saveGrilleRemise } from "../../services/commercialApi";
 
 export default function GrilleRemiseForm() {
 
@@ -42,7 +41,7 @@ export default function GrilleRemiseForm() {
         e.preventDefault();
 
 
-        await createGrille({
+        await saveGrilleRemise({
 
             nomGrille:
                 `${form.montantAvant}-${form.montantApres}`,
