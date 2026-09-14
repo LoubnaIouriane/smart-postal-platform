@@ -11,6 +11,9 @@ public class FactureDTO {
     private String clientRaisonSociale;
     private LocalDate dateEmission;
     private LocalDate dateEcheance;
+    private LocalDate dateDebutFacturation;
+    private LocalDate dateFinFacturation;
+    private String sourceGeneration;
     private Double montantHT;
     private Double tauxTVA;
     private Double montantTVA;
@@ -33,6 +36,12 @@ public class FactureDTO {
     public void setDateEmission(LocalDate dateEmission) { this.dateEmission = dateEmission; }
     public LocalDate getDateEcheance() { return dateEcheance; }
     public void setDateEcheance(LocalDate dateEcheance) { this.dateEcheance = dateEcheance; }
+    public LocalDate getDateDebutFacturation() { return dateDebutFacturation; }
+    public void setDateDebutFacturation(LocalDate dateDebutFacturation) { this.dateDebutFacturation = dateDebutFacturation; }
+    public LocalDate getDateFinFacturation() { return dateFinFacturation; }
+    public void setDateFinFacturation(LocalDate dateFinFacturation) { this.dateFinFacturation = dateFinFacturation; }
+    public String getSourceGeneration() { return sourceGeneration; }
+    public void setSourceGeneration(String sourceGeneration) { this.sourceGeneration = sourceGeneration; }
     public Double getMontantHT() { return montantHT; }
     public void setMontantHT(Double montantHT) { this.montantHT = montantHT; }
     public Double getTauxTVA() { return tauxTVA; }

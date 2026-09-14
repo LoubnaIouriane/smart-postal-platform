@@ -1,11 +1,12 @@
 package ma.barid.backend.facturation.controller;
 
 import jakarta.validation.Valid;
-import ma.barid.backend.facturation.dto.FactureCreateRequest;
 import ma.barid.backend.facturation.dto.FactureDTO;
+import ma.barid.backend.facturation.dto.FactureGenerationRequest;
 import ma.barid.backend.facturation.service.FactureGenerationService;
 import ma.barid.backend.facturation.service.FacturePdfService;
 import ma.barid.backend.facturation.service.FactureService;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -61,43 +62,67 @@ public class FactureController {
     @PreAuthorize("hasRole('COMMERCIAL')")
     public List<FactureDTO> rechercher(
             @RequestParam(required = false) String statut,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate debut,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate debut,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fin
     ) {
         return factureService.rechercher(statut, debut, fin);
     }
 
-    @PostMapping
-    public ResponseEntity<FactureDTO> create(@Valid @RequestBody FactureCreateRequest request) {
-        return ResponseEntity.status(201).body(factureService.create(request));
+    @PostMapping("/generer")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<FactureDTO> genererDepuisExpeditions(
+            @Valid @RequestBody FactureGenerationRequest request
+    ) {
+        return ResponseEntity.status(201)
+                .body(factureService.genererDepuisExpeditions(request));
     }
 
     @PutMapping({"/{id}/paiement", "/{id}/marquer-payee"})
+    @PreAuthorize("hasRole('ADMIN')")
     public FactureDTO marquerPayee(@PathVariable Long id) {
         return factureService.marquerPayee(id);
     }
 
     @GetMapping("/{id}/pdf")
-    public ResponseEntity<byte[]> telechargerPdf(@PathVariable Long id, Authentication authentication) {
+    public ResponseEntity<byte[]> telechargerPdf(
+            @PathVariable Long id,
+            Authentication authentication
+    ) {
         if (authentication != null && authentication.isAuthenticated()) {
-            boolean estCommercial = authentication.getAuthorities().stream()
+
+            boolean estCommercial = authentication.getAuthorities()
+                    .stream()
                     .anyMatch(a -> a.getAuthority().equals("ROLE_COMMERCIAL"));
-            if (!estCommercial && !factureService.appartientA(id, authentication.getName())) {
+
+            if (!estCommercial
+                    && !factureService.appartientA(id, authentication.getName())) {
                 return ResponseEntity.status(403).build();
             }
         }
 
         byte[] pdf = facturePdfService.genererPdf(id);
+
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=facture-" + id + ".pdf")
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=facture-" + id + ".pdf"
+                )
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdf);
     }
 
     @PostMapping("/generer-mensuelles")
-    @PreAuthorize("hasRole('COMMERCIAL')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> declencherGenerationManuelle() {
+
         factureGenerationService.genererFacturesMensuelles();
-        return ResponseEntity.ok("Generation mensuelle declenchee manuellement");
+
+        return ResponseEntity.ok(
+                "Generation mensuelle declenchee manuellement"
+        );
     }
 }

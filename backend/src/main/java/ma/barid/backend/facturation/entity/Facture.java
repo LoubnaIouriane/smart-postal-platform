@@ -42,6 +42,12 @@ public class Facture {
     @Column(nullable = false)
     private LocalDate dateEcheance;
 
+    private LocalDate dateDebutFacturation;
+    private LocalDate dateFinFacturation;
+
+    @Column(nullable = false)
+    private String sourceGeneration = "EXPEDITIONS";
+
     @Column(nullable = false)
     private Double montantHT = 0.0;
 
@@ -83,6 +89,12 @@ public class Facture {
     public void setDateEmission(LocalDate dateEmission) { this.dateEmission = dateEmission; }
     public LocalDate getDateEcheance() { return dateEcheance; }
     public void setDateEcheance(LocalDate dateEcheance) { this.dateEcheance = dateEcheance; }
+    public LocalDate getDateDebutFacturation() { return dateDebutFacturation; }
+    public void setDateDebutFacturation(LocalDate dateDebutFacturation) { this.dateDebutFacturation = dateDebutFacturation; }
+    public LocalDate getDateFinFacturation() { return dateFinFacturation; }
+    public void setDateFinFacturation(LocalDate dateFinFacturation) { this.dateFinFacturation = dateFinFacturation; }
+    public String getSourceGeneration() { return sourceGeneration; }
+    public void setSourceGeneration(String sourceGeneration) { this.sourceGeneration = sourceGeneration; }
     public Double getMontantHT() { return montantHT; }
     public void setMontantHT(Double montantHT) { this.montantHT = montantHT; }
     public Double getTauxTVA() { return tauxTVA; }

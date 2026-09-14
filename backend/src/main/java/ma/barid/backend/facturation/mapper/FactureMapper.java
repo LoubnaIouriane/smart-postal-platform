@@ -19,6 +19,9 @@ public class FactureMapper {
         dto.setClientRaisonSociale(facture.getClientRaisonSociale());
         dto.setDateEmission(facture.getDateEmission());
         dto.setDateEcheance(facture.getDateEcheance());
+        dto.setDateDebutFacturation(facture.getDateDebutFacturation());
+        dto.setDateFinFacturation(facture.getDateFinFacturation());
+        dto.setSourceGeneration(facture.getSourceGeneration());
         dto.setMontantHT(facture.getMontantHT());
         dto.setTauxTVA(facture.getTauxTVA());
         dto.setMontantTVA(facture.getMontantTVA());
@@ -43,6 +46,16 @@ public class FactureMapper {
         dto.setPrixUnitaire(ligne.getPrixUnitaire());
         dto.setMontantLigne(ligne.getMontantLigne());
         dto.setExpeditionId(ligne.getExpeditionId());
+        dto.setCodeExpedition(ligne.getCodeExpedition());
+        dto.setTypeEnvoi(ligne.getTypeEnvoi());
+        dto.setPoidsDeclare(ligne.getPoidsDeclare());
+        dto.setPoidsReel(ligne.getPoidsReel());
+        dto.setDestinataireNom(ligne.getDestinataireNom());
+        dto.setDestinataireTelephone(ligne.getDestinataireTelephone());
+        dto.setDestinataireAdresse(ligne.getDestinataireAdresse());
+        dto.setMotifModificationTarif(ligne.getMotifModificationTarif());
+        dto.setVilleDepartId(ligne.getVilleDepartId());
+        dto.setVilleDestinationId(ligne.getVilleDestinationId());
         return dto;
     }
 }
