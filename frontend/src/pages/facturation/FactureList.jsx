@@ -1,71 +1,26 @@
-import { useEffect, useState } from "react";
-import Navbar from "../../components/layout/Navbar";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import Navbar from "../../components/layout/Navbar";
 import StatutBadge from "../../components/StatutBadge";
 import { formatMontant } from "../../utils/formatMontant";
-import {
-  genererFacturesMensuelles,
-  getFactures,
-  rechercherFactures,
-  telechargerPdf,
-} from "../../services/factureApi";
+import { genererFacturePdfMock } from "../../utils/generateFacturePdf";
+import { FACTURES_MOCK } from "../../data/facturesMockData";
 
 export default function FactureList() {
-  const [factures, setFactures] = useState([]);
   const [statut, setStatut] = useState("");
-  const [debut, setDebut] = useState("");
-  const [fin, setFin] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [filtreStatut, setFiltreStatut] = useState("");
 
-  const load = async () => {
-    setLoading(true);
-    setError("");
+  // Filtrage 100% local (aucun appel reseau) sur les donnees constantes
+  const factures = useMemo(() => {
+    if (!filtreStatut) return FACTURES_MOCK;
+    return FACTURES_MOCK.filter((facture) => facture.statutPaiement === filtreStatut);
+  }, [filtreStatut]);
 
-    try {
-      setFactures(await getFactures());
-    } catch (err) {
-      setError(err.response?.data?.message || "Impossible de charger les factures.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const handleFiltrer = () => setFiltreStatut(statut);
 
-  useEffect(() => {
-    load();
-  }, []);
-
-  const handleFiltrer = async () => {
-    setError("");
-
-    try {
-      const resultats = await rechercherFactures({
-        statut: statut || undefined,
-        debut: debut || undefined,
-        fin: fin || undefined,
-      });
-
-      setFactures(resultats);
-    } catch (err) {
-      setError(err.response?.data?.message || "Erreur lors du filtrage.");
-    }
-  };
-
-  const handlePdf = async (facture) => {
-    const blob = await telechargerPdf(facture.idFacture);
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-
-    link.href = url;
-    link.download = `facture-${facture.numeroFacture}.pdf`;
-    link.click();
-
-    URL.revokeObjectURL(url);
-  };
-
-  const handleGeneration = async () => {
-    await genererFacturesMensuelles();
-    await load();
+  const handleReset = () => {
+    setStatut("");
+    setFiltreStatut("");
   };
 
   return (
@@ -78,20 +33,6 @@ export default function FactureList() {
             <p className="eyebrow">Module Facturation</p>
             <h1>Toutes les factures</h1>
           </div>
-
-          <div className="header-actions">
-            <Link className="btn btn-primary" to="/commercial/factures/nouvelle">
-              Nouvelle facture
-            </Link>
-
-            <button
-              className="btn btn-secondary"
-              type="button"
-              onClick={handleGeneration}
-            >
-              Generation mensuelle
-            </button>
-          </div>
         </div>
 
         <section className="toolbar">
@@ -101,80 +42,58 @@ export default function FactureList() {
             <option value="NON_PAYEE">Non payee</option>
           </select>
 
-          <input
-            type="date"
-            value={debut}
-            onChange={(event) => setDebut(event.target.value)}
-          />
-
-          <input
-            type="date"
-            value={fin}
-            onChange={(event) => setFin(event.target.value)}
-          />
-
           <button className="btn btn-secondary" type="button" onClick={handleFiltrer}>
             Filtrer
           </button>
-
-          <button className="btn btn-ghost" type="button" onClick={load}>
+          <button className="btn btn-ghost" type="button" onClick={handleReset}>
             Reinitialiser
           </button>
         </section>
 
-        {error && <p className="alert-error">{error}</p>}
+        <section className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>N Facture</th>
+                <th>Client</th>
+                <th>Date</th>
+                <th>Remise</th>
+                <th>Total TTC</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
 
-        {loading ? (
-          <p className="muted">Chargement...</p>
-        ) : (
-          <section className="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>N Facture</th>
-                  <th>Client</th>
-                  <th>Date</th>
-                  <th>Remise</th>
-                  <th>Total TTC</th>
-                  <th>Statut</th>
-                  <th>Actions</th>
+            <tbody>
+              {factures.map((facture) => (
+                <tr key={facture.idFacture}>
+                  <td>{facture.numeroFacture}</td>
+                  <td>{facture.clientRaisonSociale}</td>
+                  <td>{facture.dateEmission}</td>
+                  <td>{facture.tauxRemise || 0}%</td>
+                  <td>{formatMontant(facture.montantTTC)}</td>
+                  <td>
+                    <StatutBadge statut={facture.statutPaiement} />
+                  </td>
+                  <td className="actions-cell">
+                    <Link to={`/commercial/factures/${facture.idFacture}`}>Details</Link>
+                    <button type="button" onClick={() => genererFacturePdfMock(facture)}>
+                      PDF
+                    </button>
+                  </td>
                 </tr>
-              </thead>
+              ))}
 
-              <tbody>
-                {factures.map((facture) => (
-                  <tr key={facture.idFacture}>
-                    <td>{facture.numeroFacture}</td>
-                    <td>{facture.clientRaisonSociale}</td>
-                    <td>{facture.dateEmission}</td>
-                    <td>{facture.tauxRemise || 0}%</td>
-                    <td>{formatMontant(facture.montantTTC)}</td>
-                    <td>
-                      <StatutBadge statut={facture.statutPaiement} />
-                    </td>
-                    <td className="actions-cell">
-                      <Link to={`/commercial/factures/${facture.idFacture}`}>
-                        Details
-                      </Link>
-
-                      <button type="button" onClick={() => handlePdf(facture)}>
-                        PDF
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-
-                {factures.length === 0 && (
-                  <tr>
-                    <td colSpan="7" className="empty-cell">
-                      Aucune facture trouvee.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </section>
-        )}
+              {factures.length === 0 && (
+                <tr>
+                  <td colSpan="7" className="empty-cell">
+                    Aucune facture trouvee.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </section>
       </main>
     </>
   );

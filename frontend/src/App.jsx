@@ -51,6 +51,7 @@ import FacteurCollectePage from "./pages/facteur/FacteurCollectePage";
 // =========================
 import FactureList from "./pages/facturation/FactureList";
 import FactureDetail from "./pages/facturation/FactureDetail";
+import FactureDetailClient from "./pages/facturation/FactureDetailClient";
 import FactureForm from "./pages/facturation/FactureForm";
 import FactureHistorique from "./pages/facturation/FactureHistorique";
 import Factures from "./pages/facturation/Factures";
@@ -342,7 +343,15 @@ function App() {
                         }
                     />
 
-
+                    {/* Détail d'une facture (commercial) */}
+                    <Route
+                        path="/commercial/factures/:id"
+                        element={
+                            <ProtectedRoute allowedRoles={["COMMERCIAL"]}>
+                                <FactureDetail />
+                            </ProtectedRoute>
+                        }
+                    />
                     {/* =====================================
                         EXPEDITIONS
                     ===================================== */}
@@ -379,7 +388,15 @@ function App() {
                     {/* =====================================
                         FACTURATION
                     ===================================== */}
-
+                    {/* Détail d'une facture (client) */}
+                    <Route
+                        path="/client/factures/:id"
+                        element={
+                            <ProtectedRoute allowedRoles={["CLIENT"]}>
+                                <FactureDetailClient />
+                            </ProtectedRoute>
+                        }
+                    />
                     {/* Factures du client */}
                     <Route
                         path="/client/factures"

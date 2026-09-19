@@ -1,47 +1,33 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/layout/Navbar";
 import StatutBadge from "../../components/StatutBadge";
-import { getFacturesByClient } from "../../services/factureApi";
+import { useAuth } from "../../context/AuthContext";
 import { formatMontant } from "../../utils/formatMontant";
+import { getIdentifiantConnecte } from "../../utils/decodeToken";
+import { genererFacturePdfMock } from "../../utils/generateFacturePdf";
+import { getFacturesClient } from "../../data/facturesMockData";
 
 export default function FactureHistorique() {
-  const [clientId, setClientId] = useState("");
-  const [factures, setFactures] = useState([]);
-  const [error, setError] = useState("");
+  const { token } = useAuth();
 
-  const charger = async (event) => {
-    event.preventDefault();
-    setError("");
-    try {
-      setFactures(await getFacturesByClient(clientId));
-    } catch (err) {
-      setError(err.response?.data?.message || "Impossible de charger l'historique.");
-    }
-  };
+  // Nom reel du client connecte, lu depuis le token JWT
+  const nomClient = getIdentifiantConnecte(token) || "Client";
+
+  // Historique (donnees constantes, identiques pour tout client)
+  const factures = getFacturesClient(nomClient);
 
   return (
     <>
       <Navbar />
+
       <main className="page-shell">
         <div className="page-header">
           <div>
             <p className="eyebrow">Espace client</p>
             <h1>Mes factures</h1>
+            <p className="muted">Bonjour {nomClient}, voici l'historique de vos factures.</p>
           </div>
         </div>
-
-        <form className="toolbar" onSubmit={charger}>
-          <input
-            value={clientId}
-            onChange={(event) => setClientId(event.target.value)}
-            placeholder="ID client"
-            required
-          />
-          <button className="btn btn-primary" type="submit">Consulter</button>
-        </form>
-
-        {error && <p className="alert-error">{error}</p>}
 
         <section className="table-wrap">
           <table>
@@ -49,21 +35,41 @@ export default function FactureHistorique() {
               <tr>
                 <th>N Facture</th>
                 <th>Date</th>
+                <th>Echeance</th>
+                <th>Remise</th>
                 <th>Total TTC</th>
                 <th>Statut</th>
-                <th>Action</th>
+                <th>Actions</th>
               </tr>
             </thead>
+
             <tbody>
               {factures.map((facture) => (
                 <tr key={facture.idFacture}>
                   <td>{facture.numeroFacture}</td>
                   <td>{facture.dateEmission}</td>
+                  <td>{facture.dateEcheance}</td>
+                  <td>{facture.tauxRemise || 0}%</td>
                   <td>{formatMontant(facture.montantTTC)}</td>
-                  <td><StatutBadge statut={facture.statutPaiement} /></td>
-                  <td><Link to={`/client/factures/${facture.idFacture}`}>Voir le detail</Link></td>
+                  <td>
+                    <StatutBadge statut={facture.statutPaiement} />
+                  </td>
+                  <td className="actions-cell">
+                    <Link to={`/client/factures/${facture.idFacture}`}>Details</Link>
+                    <button type="button" onClick={() => genererFacturePdfMock(facture)}>
+                      PDF
+                    </button>
+                  </td>
                 </tr>
               ))}
+
+              {factures.length === 0 && (
+                <tr>
+                  <td colSpan="7" className="empty-cell">
+                    Aucune facture trouvee.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </section>
