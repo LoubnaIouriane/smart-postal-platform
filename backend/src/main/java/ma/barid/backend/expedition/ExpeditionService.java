@@ -1,7 +1,10 @@
+
 package ma.barid.backend.expedition;
 
+import ma.barid.backend.auth.entity.Client;
 import ma.barid.backend.auth.entity.Facteur;
 import ma.barid.backend.auth.entity.Ville;
+import ma.barid.backend.auth.repository.ClientRepository;
 import ma.barid.backend.auth.repository.FacteurRepository;
 import ma.barid.backend.auth.repository.VilleRepository;
 import org.springframework.stereotype.Service;
@@ -22,17 +25,21 @@ public class ExpeditionService {
     private final TranchePoidsRepository trancheRepository;
     private final VilleRepository villeRepository;
     private final FacteurRepository facteurRepository;
+    private final ClientRepository clientRepository;
 
+    // Constructeur avec ClientRepository
     public ExpeditionService(
             ExpeditionRepository repository,
             TranchePoidsRepository trancheRepository,
             VilleRepository villeRepository,
-            FacteurRepository facteurRepository
+            FacteurRepository facteurRepository,
+            ClientRepository clientRepository
     ) {
         this.repository = repository;
         this.trancheRepository = trancheRepository;
         this.villeRepository = villeRepository;
         this.facteurRepository = facteurRepository;
+        this.clientRepository = clientRepository;
     }
 
     public Expedition creerExpedition(ExpeditionRequest request) {
@@ -43,18 +50,26 @@ public class ExpeditionService {
         BigDecimal poidsBd = BigDecimal.valueOf(request.getPoids());
 
         if (poidsBd.compareTo(POIDS_MIN) < 0) {
-            throw new IllegalArgumentException("Le poids minimum autorisé est de 0,001 kg.");
+            throw new IllegalArgumentException(
+                    "Le poids minimum autorisé est de 0,001 kg."
+            );
         }
 
         if (poidsBd.compareTo(POIDS_MAX) > 0) {
-            throw new IllegalArgumentException("Le poids maximum autorisé est de 31 kg.");
+            throw new IllegalArgumentException(
+                    "Le poids maximum autorisé est de 31 kg."
+            );
         }
 
         Ville depart = villeRepository.findById(request.getIdVilleDepart())
-                .orElseThrow(() -> new IllegalArgumentException("Ville de départ invalide."));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Ville de départ invalide.")
+                );
 
         Ville destination = villeRepository.findById(request.getIdVilleDestination())
-                .orElseThrow(() -> new IllegalArgumentException("Ville de destination invalide."));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Ville de destination invalide.")
+                );
 
         Expedition expedition = new Expedition();
         expedition.setTypeEnvoi(request.getTypeEnvoi());
@@ -74,13 +89,33 @@ public class ExpeditionService {
         return repository.save(expedition);
     }
 
+    // Créer une expédition et l'associer au client connecté
+    public Expedition creerExpedition(
+            ExpeditionRequest request,
+            String identifiant
+    ) {
+        Expedition expedition = creerExpedition(request);
+
+        if (identifiant != null) {
+            clientRepository.findByIdentifiant(identifiant).ifPresent(client -> {
+                expedition.setClient(client);
+                repository.save(expedition);
+            });
+        }
+
+        return expedition;
+    }
+
     public List<Expedition> listerExpeditions() {
         return repository.findAll();
     }
 
     public List<Expedition> listerExpeditionsACollecter() {
         return repository.findByStatutIn(
-                List.of(StatutExpedition.EN_ATTENTE, StatutExpedition.VALIDEE)
+                List.of(
+                        StatutExpedition.EN_ATTENTE,
+                        StatutExpedition.VALIDEE
+                )
         );
     }
 
@@ -94,18 +129,28 @@ public class ExpeditionService {
 
     public Expedition trouverParCode(String code) {
         return repository.findByCodeTracking(code)
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "Aucune expédition trouvée avec ce code."
-                ));
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "Aucune expédition trouvée avec ce code."
+                        )
+                );
     }
 
-    public Expedition changerStatut(Long id, StatutExpedition nouveauStatut) {
+    public Expedition changerStatut(
+            Long id,
+            StatutExpedition nouveauStatut
+    ) {
         Expedition expedition = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Expédition introuvable."));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Expédition introuvable.")
+                );
 
         if (!transitionAutorisee(expedition.getStatut(), nouveauStatut)) {
             throw new IllegalArgumentException(
-                    "Transition interdite : " + expedition.getStatut() + " → " + nouveauStatut
+                    "Transition interdite : "
+                            + expedition.getStatut()
+                            + " → "
+                            + nouveauStatut
             );
         }
 
@@ -120,10 +165,14 @@ public class ExpeditionService {
 
     public Expedition annulerExpedition(Long id) {
         Expedition expedition = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Expédition introuvable."));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Expédition introuvable.")
+                );
 
         if (expedition.getStatut() == StatutExpedition.ANNULEE) {
-            throw new IllegalArgumentException("Cette expédition est déjà annulée.");
+            throw new IllegalArgumentException(
+                    "Cette expédition est déjà annulée."
+            );
         }
 
         if (expedition.getStatut() == StatutExpedition.COLLECTEE) {
@@ -151,21 +200,33 @@ public class ExpeditionService {
         return repository.save(expedition);
     }
 
-    public Expedition assignerFacteur(Long idExpedition, Long idFacteur) {
+    public Expedition assignerFacteur(
+            Long idExpedition,
+            Long idFacteur
+    ) {
         Expedition expedition = repository.findById(idExpedition)
-                .orElseThrow(() -> new IllegalArgumentException("Expédition introuvable."));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Expédition introuvable.")
+                );
 
         Facteur facteur = facteurRepository.findById(idFacteur)
-                .orElseThrow(() -> new IllegalArgumentException("Facteur introuvable."));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Facteur introuvable.")
+                );
 
         expedition.setFacteurAssigne(facteur);
 
         return repository.save(expedition);
     }
 
-    public Expedition enregistrerPoidsReel(Long idExpedition, Double poidsReel) {
+    public Expedition enregistrerPoidsReel(
+            Long idExpedition,
+            Double poidsReel
+    ) {
         Expedition expedition = repository.findById(idExpedition)
-                .orElseThrow(() -> new IllegalArgumentException("Expédition introuvable."));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Expédition introuvable.")
+                );
 
         expedition.setPoidsReel(poidsReel);
 
@@ -187,9 +248,11 @@ public class ExpeditionService {
             case EN_ATTENTE ->
                     nouveau == StatutExpedition.VALIDEE
                             || nouveau == StatutExpedition.ANNULEE;
+
             case VALIDEE ->
                     nouveau == StatutExpedition.COLLECTEE
                             || nouveau == StatutExpedition.ANNULEE;
+
             case COLLECTEE, ANNULEE -> false;
         };
     }

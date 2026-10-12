@@ -9,7 +9,8 @@ import ma.barid.backend.auth.entity.Ville;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import ma.barid.backend.auth.entity.Client;
 @Entity
 @Table(name = "expedition")
 @Getter
@@ -47,6 +48,11 @@ public class Expedition {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_facteur")
     private Facteur facteurAssigne;
+    // Client propriétaire de l'envoi (null pour les anciens envois). @JsonIgnore : ne jamais exposer Client (mot de passe hashé)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id")
+    private Client client;
 
     private String telephoneExpediteur;
     private String adresseExpediteur;

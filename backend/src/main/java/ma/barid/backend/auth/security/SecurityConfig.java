@@ -51,6 +51,7 @@ public class SecurityConfig {
                         .requestMatchers("/commercial/**").hasRole("COMMERCIAL")
                         .requestMatchers("/facteur/**").hasRole("FACTEUR")
                         .requestMatchers("/client/**").hasRole("CLIENT")
+                        .requestMatchers("/api/ai/**").hasAnyRole("CLIENT", "COMMERCIAL", "ADMIN")
 
                         .anyRequest().authenticated()
                 )

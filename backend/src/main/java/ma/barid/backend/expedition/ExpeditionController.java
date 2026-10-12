@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-
+import org.springframework.security.core.Authentication;
 @RestController
 @RequestMapping("/api/expeditions")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -20,9 +20,10 @@ public class ExpeditionController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ExpeditionRequest request) {
+    public ResponseEntity<?> create(@RequestBody ExpeditionRequest request, Authentication auth) {
         try {
-            return ResponseEntity.ok(service.creerExpedition(request));
+            String identifiant = (auth != null) ? auth.getName() : null; // "anonymousUser" → aucun client trouvé, sans effet
+            return ResponseEntity.ok(service.creerExpedition(request, identifiant));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
